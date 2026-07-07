@@ -3,794 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>業務を整理し、仕組みに変える。| 業務システム開発・既存システム支援・Web制作</title>
-<meta name="description" content="Web制作から、業務システム開発、既存システムの調査・改修まで。業務を整理し、仕組みに変える。">
+<title>業務を整理し、仕組みに変える。| コンセプトモック v3(フル)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Klee+One:wght@400;600&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ================================================================
-   Silent Blueprint — Design Tokens
-================================================================ */
 :root{
-  --bg:        #F1F2EF;
-  --bg2:       #E7EAE7;
-  --ink:       #20242C;
-  --struct:    #2B4A63;
-  --accent:    #A6402C;
-  --rule:      #C7C6BE;
+  --paper:  #FDFDFB;
+  --ink:    #171715;
+  --sub:    #71716B;
+  --line:   #E7E6E0;
 
-  --font-head: "Zen Kaku Gothic New", sans-serif;
+  --sticky-y: #F5E27C;
+  --sticky-p: #F3C7D6;
+  --sticky-b: #C7DCF0;
+  --sticky-g: #CFEAD1;
+  --tape:     #E9DDBB;
+  --accent:   #2B4FC7;
+
+  --font-disp: "Shippori Mincho B1", serif;
+  --font-hand: "Klee One", cursive;
   --font-body: "Noto Sans JP", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-  --font-en:   "IBM Plex Sans", sans-serif;
+  --font-data: "IBM Plex Mono", monospace;
 
-  --w-narrow: 760px;
-  --w-base:   1000px;
-  --w-wide:   1120px;
-
+  --ease-pop: cubic-bezier(.34,1.56,.64,1);
   --ease: cubic-bezier(.22,.61,.2,1);
 }
-
 *{ margin:0; padding:0; box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:var(--font-body);
-  font-size:16px;
-  line-height:1.9;
-  font-feature-settings:"palt";
-  -webkit-font-smoothing:antialiased;
+  background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); font-size:16px; line-height:1.9;
+  font-feature-settings:"palt"; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-img,svg{ display:block; }
 a{ color:inherit; text-decoration:none; }
-:focus-visible{ outline:2px solid var(--struct); outline-offset:3px; }
+img,svg{ display:block; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
 
-/* ---------- common vocabulary ---------- */
-.container{ max-width:var(--w-base); margin:0 auto; padding:0 32px; }
-.container--narrow{ max-width:var(--w-narrow); }
-.container--wide{ max-width:var(--w-wide); }
+.container{ max-width:1120px; margin:0 auto; padding:0 32px; }
+.container--narrow{ max-width:800px; }
 
-.sec-head{ display:flex; align-items:baseline; gap:18px; margin-bottom:12px; }
-.sec-num{
-  font-family:var(--font-mono); font-size:12px; letter-spacing:.12em;
-  color:var(--struct);
-}
-.sec-label{
-  font-family:var(--font-en); font-size:11px; letter-spacing:.28em;
-  text-transform:uppercase; color:var(--struct);
-}
-h2{
-  font-family:var(--font-head); font-weight:700;
-  letter-spacing:.06em; line-height:1.5;
-}
-.h2-major{ font-size:clamp(26px,3.4vw,38px); }
-.h2-mid{   font-size:clamp(22px,2.6vw,28px); }
-.h2-quiet{ font-size:clamp(18px,2vw,21px);  }
-
-.rule-top{ border-top:1px solid var(--rule); }
-
-/* buttons — 罫線が基本。塗りは最終CTAの1箇所のみ */
-.btn{
-  display:inline-flex; align-items:center; gap:12px;
-  border:1px solid var(--ink);
-  padding:14px 30px;
-  font-family:var(--font-body); font-size:14px; font-weight:500;
-  letter-spacing:.1em;
-  background:transparent;
-  transition:background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
-}
-.btn .arw{ font-family:var(--font-mono); font-size:12px; transition:transform .25s var(--ease); }
-.btn:hover{ background:var(--ink); color:var(--bg); }
-.btn:hover .arw{ transform:translateX(4px); }
-.btn--struct{ border-color:var(--struct); color:var(--struct); }
-.btn--struct:hover{ background:var(--struct); color:var(--bg); }
-.btn--fill{
-  background:var(--accent); border-color:var(--accent); color:var(--bg);
-}
-.btn--fill:hover{ background:var(--ink); border-color:var(--ink); color:var(--bg); }
-
-.mono{ font-family:var(--font-mono); }
-
-/* reveal (軽いフェード共通) */
 .rv{ opacity:0; transform:translateY(14px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
 .rv.on{ opacity:1; transform:none; }
+
+h1,h2,h3{ font-family:var(--font-disp); font-weight:700; letter-spacing:.02em; line-height:1.6; }
+.h2-major{ font-size:clamp(26px,3.3vw,36px); }
+.h2-mid{   font-size:clamp(21px,2.5vw,26px); }
+
+/* ---------- eyebrow(washi-tape ラベル。番号は本当に連番の場所だけ) ---------- */
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--font-data); font-size:11px; letter-spacing:.16em; color:var(--sub);
+  margin-bottom:14px;
+}
+.eyebrow .tape-chip{
+  display:inline-block; padding:4px 10px;
+  background:repeating-linear-gradient(45deg, var(--tape) 0 5px, color-mix(in srgb, var(--tape) 65%, white) 5px 10px);
+  color:var(--ink); font-weight:500; transform:rotate(-1.5deg);
+}
+
+/* ---------- 汎用プロップ(散らかり要素) ---------- */
+.prop{ position:absolute; }
+.paper-shadow{ filter:drop-shadow(0 3px 6px rgba(0,0,0,.13)) drop-shadow(0 1px 1px rgba(0,0,0,.06)); }
+.sticky{ padding:14px 16px 16px; font-family:var(--font-hand); font-size:14px; line-height:1.6; width:150px; }
+.sticky.y{ background:var(--sticky-y); } .sticky.p{ background:var(--sticky-p); }
+.sticky.b{ background:var(--sticky-b); } .sticky.g{ background:var(--sticky-g); }
+.card{ background:var(--paper); border:1px solid var(--ink); padding:14px 18px; }
+.tape{ position:absolute; width:66px; height:22px;
+  background:repeating-linear-gradient(45deg, var(--tape) 0 6px, color-mix(in srgb, var(--tape) 70%, white) 6px 12px);
+  opacity:.9; }
+.paperclip{ position:absolute; width:26px; height:40px; }
+.paperclip path{ fill:none; stroke:#9A9A93; stroke-width:2.4; }
+.pin{ position:absolute; width:14px; height:14px; border-radius:50%; }
+.pin::after{ content:""; position:absolute; inset:0; border-radius:50%;
+  box-shadow:inset 0 -2px 3px rgba(0,0,0,.25), 0 2px 3px rgba(0,0,0,.25); }
+.pin.red{ background:#D14B3A; } .pin.blue{ background:#2B4FC7; }
+
+.receipt-edge{
+  clip-path:polygon(0% 0%,100% 0%,100% 94%,96% 100%,90% 94%,84% 100%,78% 94%,72% 100%,66% 94%,
+    60% 100%,54% 94%,48% 100%,42% 94%,36% 100%,30% 94%,24% 100%,18% 94%,12% 100%,6% 94%,0% 100%);
+}
+
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--font-body); font-size:14.5px; font-weight:500; letter-spacing:.03em;
+  padding:15px 30px; background:var(--ink); color:var(--paper); border:1.5px solid var(--ink);
+  transition:transform .15s ease, background .2s ease, color .2s ease;
+}
+.btn .arw{ font-family:var(--font-data); }
+.btn:hover{ background:var(--accent); border-color:var(--accent); transform:translateY(-2px); }
+.btn--outline{ background:transparent; color:var(--ink); }
+.btn--outline:hover{ background:var(--ink); color:var(--paper); }
+
+/* ---------- grid 2col(バランス調整の主役) ---------- */
+.grid-2{ display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:start; }
+.grid-2.reverse{ grid-template-columns:.9fr 1.1fr; }
+.grid-2.reverse > .visual-col{ order:-1; }
+.visual-col{ position:relative; min-height:220px; }
+
+@media (max-width:860px){
+  .grid-2, .grid-2.reverse{ grid-template-columns:1fr; }
+  .grid-2.reverse > .visual-col{ order:0; }
+  .visual-col{ min-height:140px; margin-bottom:8px; }
+}
 
 /* ================================================================
    Header
 ================================================================ */
-.site-header{
-  position:sticky; top:0; z-index:50;
-  background:color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--rule);
-}
-.site-header .inner{
-  max-width:var(--w-wide); margin:0 auto; padding:14px 32px;
-  display:flex; align-items:center; justify-content:space-between;
-}
-.brand{
-  font-family:var(--font-head); font-weight:700; font-size:15px; letter-spacing:.12em;
-}
-.brand .b-short{ display:none; }
-.brand small{
-  font-family:var(--font-mono); font-weight:400; font-size:10px;
-  letter-spacing:.18em; color:var(--struct); margin-left:12px;
-}
-.gnav{ display:flex; align-items:center; gap:26px; }
-.gnav a{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; color:var(--ink);
-  border-bottom:1px solid transparent; padding-bottom:2px;
-  transition:border-color .2s;
-}
-.gnav a:hover{ border-color:var(--struct); color:var(--struct); }
-.gnav .nav-cta{
-  font-family:var(--font-body); font-size:12px; letter-spacing:.1em;
-  border:1px solid var(--struct); color:var(--struct); padding:8px 18px;
-}
-.gnav .nav-cta:hover{ background:var(--struct); color:var(--bg); }
+.site-header{ position:sticky; top:0; z-index:50; padding:20px 0;
+  background:color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line); }
+.site-header .container{ display:flex; align-items:center; justify-content:space-between; }
+.brand .name{ font-family:var(--font-disp); font-weight:700; font-size:15px; letter-spacing:.08em; }
+.brand small{ display:block; font-family:var(--font-data); font-size:10px; color:var(--sub); letter-spacing:.14em; margin-top:2px; }
+.gnav{ display:flex; align-items:center; gap:24px; }
+.gnav a{ font-family:var(--font-data); font-size:11px; letter-spacing:.14em; color:var(--sub); }
+.gnav a:hover{ color:var(--ink); }
+.gnav .nav-cta{ font-family:var(--font-body); font-size:12.5px; letter-spacing:.04em; color:var(--paper);
+  background:var(--ink); padding:9px 18px; }
+.gnav .nav-cta:hover{ background:var(--accent); }
+@media (max-width:700px){ .gnav a:not(.nav-cta){ display:none; } }
 
 /* ================================================================
-   01. Hero
+   Hero(この設計の"驚き"はここに集約)
 ================================================================ */
-.hero{
-  position:relative;
-  overflow:hidden;
-  min-height:calc(100vh - 61px);
-  display:flex; align-items:center;
-}
-.hero-grid{
-  position:absolute; inset:-40px;
-  background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--rule) 45%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--rule) 45%, transparent) 1px, transparent 1px);
-  background-size:56px 56px;
-  will-change:transform;
-  pointer-events:none;
-}
-.hero .inner{
-  position:relative; z-index:2;
-  max-width:var(--w-wide); margin:0 auto;
-  width:100%;
-  padding:80px 32px 96px;
-  display:grid;
-  grid-template-columns:minmax(0,46%) minmax(0,54%);
-  gap:48px;
-  align-items:center;
-}
-.hero h1{
-  font-family:var(--font-head); font-weight:700;
-  font-size:clamp(32px,4.2vw,50px);
-  letter-spacing:.08em; line-height:1.55;
-}
-.hero .lede{
-  margin-top:26px; font-size:15px; line-height:2.1; letter-spacing:.05em;
-  max-width:34em;
-}
-.hero-tags{
-  margin-top:34px;
-  display:flex; flex-direction:column;
-  border-top:1px solid var(--rule);
-  border-bottom:1px solid var(--rule);
-}
-.hero-tags .tag{
-  padding:13px 0;
-  display:flex; align-items:baseline; gap:14px;
-}
-.hero-tags .tag + .tag{ border-top:1px solid var(--rule); }
-.hero-tags .tag b{
-  font-family:var(--font-mono); font-weight:500; font-size:11px;
-  letter-spacing:.2em; color:var(--struct);
-  flex:none; width:64px;
-}
-.hero-tags .tag span{ font-size:12px; letter-spacing:.06em; }
-.hero-cta{ margin-top:40px; }
+.hero{ padding:90px 0 190px; position:relative; overflow:visible; }
+.hero .grid-2{ align-items:center; }
+.hero h1{ font-size:clamp(32px,4.6vw,52px); }
+.hero .lede{ margin-top:24px; font-size:15.5px; color:var(--sub); max-width:30em; }
+.hero-cta{ margin-top:44px; }
+.hero .visual-col{ min-height:380px; }
 
-/* hero drawing */
-.hero-fig{ position:relative; will-change:transform; }
-.hero-fig svg{ width:100%; height:auto; overflow:visible; }
-.hero-fig .fig-note{
-  margin-top:14px;
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.16em;
-  color:var(--struct);
-  display:flex; justify-content:space-between;
-  border-top:1px solid var(--rule); padding-top:10px;
+/* 小物はJSでフワッと投げ込まれる(初期状態は画面外) */
+.hero .prop{ opacity:0; }
+.hero .prop.land{
+  transition:transform 1s var(--ease-pop), opacity .3s ease;
+  opacity:1;
 }
+.hero .prop.tilt{ transition:transform .35s var(--ease); }
 
-/* svg pieces */
-.seg line, .seg path{ stroke:var(--struct); stroke-width:1.5; fill:none; }
-.seg{
-  transform-box:fill-box; transform-origin:center;
-  transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--r,0deg));
-  opacity:.5;
-  transition:transform 1.1s var(--ease) var(--d,0s), opacity 1.1s var(--ease) var(--d,0s);
-}
-.assembled .seg{ transform:none; opacity:1; }
+.hero .p-sticky1{ top:0; right:60px; width:160px; }
+.hero .p-tape1{ top:-14px; right:96px; }
+.hero .p-card1{ top:150px; right:10px; width:230px; }
+.hero .p-tape2{ top:132px; right:150px; }
+.hero .p-clip1{ top:160px; right:30px; }
+.hero .p-sticky2{ top:290px; right:180px; width:130px; }
+.hero .p-pin1{ top:8px; right:230px; }
 
-.node rect{
-  stroke:var(--struct); stroke-width:1.5; fill:var(--bg);
-}
-.node{
-  transform-box:fill-box; transform-origin:center;
-  transform:translate(var(--tx,0px),var(--ty,0px));
-  opacity:0;
-  transition:transform 1s var(--ease) var(--d,0s), opacity 1s var(--ease) var(--d,0s);
-}
-.assembled .node{ transform:none; opacity:1; }
+.card-tags ul{ list-style:none; font-family:var(--font-data); font-size:11.5px; letter-spacing:.05em; }
+.card-tags li{ padding:7px 0; border-bottom:1px dashed var(--line); }
+.card-tags li:last-child{ border-bottom:none; }
 
-.nlabel{
-  font-family:var(--font-head); font-weight:500; font-size:15px;
-  fill:var(--ink); letter-spacing:2px;
-}
-.nsub{
-  font-family:var(--font-mono); font-size:8.5px; letter-spacing:1.5px;
-  fill:var(--struct);
-}
-.lbl{ opacity:0; transition:opacity .8s var(--ease) var(--d,1.6s); }
-.assembled .lbl{ opacity:1; }
-
-.joint{ fill:var(--bg); stroke:var(--struct); stroke-width:1.2; opacity:0; transition:opacity .6s var(--ease) var(--d,1.4s); }
-.assembled .joint{ opacity:1; }
-
-.dim{ stroke:var(--rule); stroke-width:1; opacity:0; transition:opacity .8s var(--ease) 1.9s; }
-.dimtxt{ font-family:var(--font-mono); font-size:8.5px; letter-spacing:2px; fill:var(--struct); opacity:0; transition:opacity .8s var(--ease) 2s; }
-.assembled .dim, .assembled .dimtxt{ opacity:1; }
-
-/* ================================================================
-   02. Problem
-================================================================ */
-.problem{ padding:110px 0 90px; }
-.problem h2{ margin-bottom:44px; }
-.problem ul{ list-style:none; border-top:1px solid var(--rule); }
-.problem li{
-  border-bottom:1px solid var(--rule);
-  padding:20px 4px;
-  font-size:15px; letter-spacing:.05em;
-  display:flex; gap:18px; align-items:baseline;
-}
-.problem li .idx{
-  font-family:var(--font-mono); font-size:11px; color:var(--struct); letter-spacing:.1em;
-  flex:none;
-}
-.problem .closing{
-  margin-top:40px; font-size:16px; font-weight:500; letter-spacing:.08em;
-}
-.problem .closing .lead-line{
-  display:inline-block; width:56px; height:1px; background:var(--struct);
-  vertical-align:middle; margin-right:16px;
+@media (max-width:860px){
+  .hero{ padding:64px 0 72px; }
+  .hero .prop{ display:none; }
 }
 
 /* ================================================================
-   03. System  (最大密度)
+   Problem
 ================================================================ */
-.system{ padding:100px 0 110px; position:relative; }
-.system::before{ /* 図面枠:上辺のみ強め */
-  content:""; position:absolute; top:0; left:0; right:0;
-  border-top:1px solid var(--struct);
-}
-.system .frame{
-  position:relative;
-  border-left:1px solid var(--rule);
-  padding-left:36px;
-}
-.system .frame::before{
-  content:"SYS-01"; position:absolute; left:-1px; top:-58px;
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.2em;
-  color:var(--struct);
-  border-left:1px solid var(--rule); padding:6px 0 6px 12px;
-}
-.system h2{ margin:8px 0 26px; }
-.system .desc{ max-width:44em; font-size:15px; letter-spacing:.04em; }
-.domains{ margin-top:44px; }
-.domains .dhead{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--struct);
-  margin-bottom:14px;
-}
-.domains ul{
-  list-style:none; display:flex; flex-wrap:wrap;
-}
-.domains li{
-  font-size:13px; letter-spacing:.06em;
-  border:1px solid var(--rule);
-  padding:8px 16px;
-  margin:0 -1px -1px 0; /* 罫線を共有して製図らしく */
-  background:var(--bg);
-}
-.plans{ margin-top:52px; width:100%; border-collapse:collapse; }
-.plans caption{
-  text-align:left; font-family:var(--font-mono); font-size:11px;
-  letter-spacing:.2em; color:var(--struct); padding-bottom:14px;
-}
-.plans th,.plans td{
-  border:1px solid var(--rule);
-  padding:20px 22px; text-align:left; vertical-align:top;
-  font-size:14px; letter-spacing:.04em;
-}
-.plans thead th{
-  font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.18em;
-  color:var(--struct); padding:12px 22px;
-}
-.plans .pname{ font-weight:700; font-family:var(--font-head); letter-spacing:.06em; }
-.plans .price{ font-family:var(--font-mono); font-size:15px; white-space:nowrap; }
-.plans .price em{ font-style:normal; font-size:22px; letter-spacing:.02em; }
-.plans .price--main em{ color:var(--accent); }
-.plans .price--main{ position:relative; }
-.system .cta-row{ margin-top:44px; }
+.problem{ padding:100px 0; border-top:1px solid var(--line); }
+.problem .receipt-stack{ position:relative; }
+.receipt{ background:var(--paper); border:1px solid var(--line); padding:16px 20px 22px;
+  margin-bottom:-8px; font-family:var(--font-data); font-size:13.5px; letter-spacing:.02em; }
+.receipt:nth-child(1){ transform:rotate(-1.2deg); }
+.receipt:nth-child(2){ transform:rotate(.9deg); margin-left:14px; }
+.receipt:nth-child(3){ transform:rotate(-.7deg); margin-left:2px; }
+.receipt:nth-child(4){ transform:rotate(1.3deg); margin-left:20px; }
+.receipt:nth-child(5){ transform:rotate(-.4deg); margin-left:8px; margin-bottom:0; }
+.problem .closing{ margin-top:20px; font-family:var(--font-hand); font-size:17px; }
+.problem .visual-col .sticky{ top:20px; right:20px; }
+.problem .visual-col .tape{ top:0; right:56px; }
+.problem .visual-col .paperclip{ top:120px; right:200px; }
 
 /* ================================================================
-   04. Case Study
+   System
 ================================================================ */
-.case{ background:var(--bg2); padding:92px 0 96px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
-.case .sec-head{ margin-bottom:8px; }
-.case h2{ margin-bottom:48px; }
-.case .case-lede{ margin:-30px 0 52px; max-width:42em; font-size:15px; letter-spacing:.04em; }
-.case .layout{
-  display:grid; grid-template-columns:minmax(0,44%) minmax(0,56%);
-  gap:56px; align-items:start;
-}
-.case .stages{ display:flex; flex-direction:column; gap:0; }
-.stage{
-  padding:30px 0 32px;
-  border-top:1px solid var(--rule);
-  min-height:26vh;
-}
-.stage:last-child{ border-bottom:1px solid var(--rule); }
-.stage .st-tag{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.24em;
-  color:var(--struct); margin-bottom:16px; display:flex; align-items:center; gap:12px;
-}
-.stage .st-tag::before{
-  content:""; width:9px; height:9px; border:1.5px solid var(--struct); display:inline-block;
-}
-.stage.is-active .st-tag::before{ background:var(--struct); }
-.stage--after .st-tag{ color:var(--accent); }
-.stage--after .st-tag::before{ border-color:var(--accent); }
-.stage--after.is-active .st-tag::before{ background:var(--accent); }
-.stage ul{ list-style:none; }
-.stage li{ font-size:14.5px; letter-spacing:.05em; padding:5px 0; }
-.stage li::before{ content:"—"; font-family:var(--font-mono); color:var(--rule); margin-right:12px; }
-.stage--after li.chg::before{ content:"—"; color:var(--accent); }
-.stage--after li.chg{ font-weight:700; }
-.stage .flow-inline{ font-size:14.5px; letter-spacing:.04em; line-height:2.2; }
-.flow-inline .fstep{
-  display:inline-block; border:1px solid var(--struct); padding:4px 14px; margin:3px 0;
-  font-size:13px; background:var(--bg);
-}
-.flow-inline .farw{ font-family:var(--font-mono); color:var(--struct); margin:0 8px; font-size:12px; }
-.case .foot{
-  margin-top:40px; font-size:13px; letter-spacing:.05em;
-}
-.case .foot .cap{ color:var(--struct); font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; margin-bottom:8px; }
-.case .foot .note{ margin-top:14px; font-size:12px; color:color-mix(in srgb, var(--ink) 70%, var(--rule)); }
+.system{ padding:110px 0; border-top:1px solid var(--line); }
+.system .desc{ margin-top:22px; font-size:15px; color:var(--sub); max-width:38em; }
+.domains{ margin-top:36px; }
+.domains .dhead{ font-family:var(--font-data); font-size:11px; letter-spacing:.14em; color:var(--sub); margin-bottom:14px; }
+.domains ul{ list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
+.domains li{ font-size:13px; padding:8px 14px; border:1px solid var(--line); background:var(--paper); }
+.domains li:nth-child(3n+1){ transform:rotate(-1deg); }
+.domains li:nth-child(3n+2){ transform:rotate(.8deg); }
+.domains li:nth-child(3n+3){ transform:rotate(-.5deg); }
 
-/* case sticky figure */
-.case-fig-wrap{ position:sticky; top:110px; }
-.case-fig{
-  position:relative; width:100%; aspect-ratio:5/4;
-  border:1px solid var(--rule); background:var(--bg);
-}
-.case-fig .cf-head{
-  position:absolute; top:0; left:0; right:0;
-  display:flex; justify-content:space-between;
-  padding:10px 14px;
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--struct);
-  border-bottom:1px solid var(--rule);
-}
-.cf-stagelabel{ transition:color .4s; }
-.case-fig .box{
-  position:absolute;
-  border:1.5px solid var(--struct); background:var(--bg);
-  width:26%; height:12%;
-  font-size:11px; letter-spacing:.08em; font-weight:500;
-  transition:left 1s var(--ease), top 1s var(--ease), transform 1s var(--ease);
-  text-align:center; line-height:1.35;
-}
-.case-fig .box .lb,
-.case-fig .box .lf{
-  position:absolute; inset:0;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  transition:opacity .5s var(--ease) .3s;
-}
-.case-fig .box .lf{ opacity:0; }
-.case-fig .box small{ display:block; font-family:var(--font-mono); font-size:8px; letter-spacing:.14em; color:var(--struct); font-weight:400; }
-.case-fig[data-stage="flow"] .box .lb,
-.case-fig[data-stage="after"] .box .lb{ opacity:0; }
-.case-fig[data-stage="flow"] .box .lf,
-.case-fig[data-stage="after"] .box .lf{ opacity:1; }
-
-.case-fig .vlink{
-  position:absolute; width:1.5px; background:var(--struct);
-  opacity:0;
-  transition:opacity .7s var(--ease) .5s, left 1s var(--ease), top 1s var(--ease);
-}
-.case-fig .hlink{
-  position:absolute; height:1.5px; background:var(--accent);
-  opacity:0;
-  transition:opacity .7s var(--ease) .6s;
-}
-.case-fig .out{
-  position:absolute; border:1.5px solid var(--accent); color:var(--accent);
-  background:var(--bg);
-  width:40%; height:12%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:700; letter-spacing:.06em;
-  opacity:0; transition:opacity .9s var(--ease) .5s;
-  text-align:center; line-height:1.4; padding:4px;
-}
-
-/* BEFORE 配置(散在・傾き) */
-.case-fig[data-stage="before"] .b1{ left:10%; top:16%; transform:rotate(-5deg); }
-.case-fig[data-stage="before"] .b2{ left:56%; top:26%; transform:rotate(4deg); }
-.case-fig[data-stage="before"] .b3{ left:20%; top:56%; transform:rotate(2.5deg); }
-.case-fig[data-stage="before"] .b4{ left:60%; top:70%; transform:rotate(-3deg); }
-.case-fig[data-stage="before"] .vlink,
-.case-fig[data-stage="before"] .hlink,
-.case-fig[data-stage="before"] .out{ opacity:0; }
-.case-fig[data-stage="before"] .v1{ left:43%; top:22%; height:10%; }
-.case-fig[data-stage="before"] .v2{ left:43%; top:44%; height:10%; }
-.case-fig[data-stage="before"] .v3{ left:43%; top:66%; height:10%; }
-.case-fig[data-stage="before"] .hlink{ left:34%; top:82%; width:12%; }
-.case-fig[data-stage="before"] .out{ left:46%; top:76%; }
-
-/* FLOW 配置(中央の縦チェーンに整列・接続) */
-.case-fig[data-stage="flow"] .b1{ left:37%; top:10%; transform:none; }
-.case-fig[data-stage="flow"] .b2{ left:37%; top:32%; transform:none; }
-.case-fig[data-stage="flow"] .b3{ left:37%; top:54%; transform:none; }
-.case-fig[data-stage="flow"] .b4{ left:37%; top:76%; transform:none; }
-.case-fig[data-stage="flow"] .vlink{ opacity:1; }
-.case-fig[data-stage="flow"] .v1{ left:50%; top:22%; height:10%; }
-.case-fig[data-stage="flow"] .v2{ left:50%; top:44%; height:10%; }
-.case-fig[data-stage="flow"] .v3{ left:50%; top:66%; height:10%; }
-.case-fig[data-stage="flow"] .hlink{ left:63%; top:82%; width:12%; opacity:0; }
-.case-fig[data-stage="flow"] .out{ left:46%; top:76%; opacity:0; }
-
-/* AFTER 配置(チェーンを左へ寄せ、成果が接続されて現れる) */
-.case-fig[data-stage="after"] .b1{ left:8%; top:10%; transform:none; }
-.case-fig[data-stage="after"] .b2{ left:8%; top:32%; transform:none; }
-.case-fig[data-stage="after"] .b3{ left:8%; top:54%; transform:none; }
-.case-fig[data-stage="after"] .b4{ left:8%; top:76%; transform:none; }
-.case-fig[data-stage="after"] .vlink{ opacity:1; }
-.case-fig[data-stage="after"] .v1{ left:21%; top:22%; height:10%; }
-.case-fig[data-stage="after"] .v2{ left:21%; top:44%; height:10%; }
-.case-fig[data-stage="after"] .v3{ left:21%; top:66%; height:10%; }
-.case-fig[data-stage="after"] .hlink{ left:34%; top:82%; width:12%; opacity:1; }
-.case-fig[data-stage="after"] .out{ left:46%; top:76%; opacity:1; }
+.plans{ margin-top:44px; width:100%; border-collapse:collapse; }
+.plans th,.plans td{ border-bottom:1px solid var(--line); padding:16px 14px; text-align:left; font-size:14px; }
+.plans thead th{ font-family:var(--font-data); font-size:11px; letter-spacing:.14em; color:var(--sub); border-bottom:1px solid var(--ink); }
+.plans .price{ font-family:var(--font-data); white-space:nowrap; }
+.plans .price em{ font-style:normal; font-size:19px; }
+.plans tr.row-main td{ font-weight:700; border-bottom-color:var(--ink); }
+.cta-row{ margin-top:36px; }
 
 /* ================================================================
-   05. How I Build
+   Case Study
 ================================================================ */
-.howto{ padding:110px 0 100px; }
-.howto h2{ margin-bottom:54px; }
-.steps{
-  list-style:none;
-  display:grid; grid-template-columns:repeat(6,1fr);
-  border-top:1px solid var(--rule);
-  position:relative;
-}
-.steps::before{ /* 貫通する基準線 */
-  content:""; position:absolute; top:44px; left:0; right:0;
-  height:1px; background:var(--rule);
-}
-.step{
-  padding:26px 14px 6px; position:relative;
-  border-right:1px solid var(--rule);
-}
-.step:last-child{ border-right:none; }
-.step .dot{
-  width:9px; height:9px; border:1.5px solid var(--rule); background:var(--bg);
-  border-radius:50%;
-  position:absolute; top:40px; left:14px;
-  transition:border-color .5s var(--ease), background .5s var(--ease);
-}
-.step .no{
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; color:var(--rule);
-  transition:color .5s var(--ease);
-}
-.step .nm{
-  margin-top:26px; font-family:var(--font-head); font-weight:500;
-  font-size:14.5px; letter-spacing:.06em;
-  color:color-mix(in srgb, var(--ink) 55%, var(--rule));
-  transition:color .5s var(--ease);
-}
-.step .nm small{ display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; color:var(--rule); margin-top:4px; transition:color .5s var(--ease); }
-.steps.on .step .dot{ border-color:var(--struct); background:var(--struct); }
-.steps.on .step .no{ color:var(--struct); }
-.steps.on .step .nm{ color:var(--ink); }
-.steps.on .step .nm small{ color:var(--struct); }
-.steps.on .step:nth-child(1) .dot,.steps.on .step:nth-child(1) .no,.steps.on .step:nth-child(1) .nm,.steps.on .step:nth-child(1) .nm small{ transition-delay:.05s; }
-.steps.on .step:nth-child(2) .dot,.steps.on .step:nth-child(2) .no,.steps.on .step:nth-child(2) .nm,.steps.on .step:nth-child(2) .nm small{ transition-delay:.2s; }
-.steps.on .step:nth-child(3) .dot,.steps.on .step:nth-child(3) .no,.steps.on .step:nth-child(3) .nm,.steps.on .step:nth-child(3) .nm small{ transition-delay:.35s; }
-.steps.on .step:nth-child(4) .dot,.steps.on .step:nth-child(4) .no,.steps.on .step:nth-child(4) .nm,.steps.on .step:nth-child(4) .nm small{ transition-delay:.5s; }
-.steps.on .step:nth-child(5) .dot,.steps.on .step:nth-child(5) .no,.steps.on .step:nth-child(5) .nm,.steps.on .step:nth-child(5) .nm small{ transition-delay:.65s; }
-.steps.on .step:nth-child(6) .dot,.steps.on .step:nth-child(6) .no,.steps.on .step:nth-child(6) .nm,.steps.on .step:nth-child(6) .nm small{ transition-delay:.8s; }
-.howto .body{ margin-top:26px; max-width:42em; font-size:15px; letter-spacing:.04em; }
+.case{ padding:110px 0; border-top:1px solid var(--line); }
+.case-lede{ margin-top:20px; font-size:14.5px; color:var(--sub); max-width:44em; }
+.case .layout{ margin-top:48px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+@media (max-width:860px){ .case .layout{ grid-template-columns:1fr; } }
 
-/* ---------- 06. profile ---------- */
-.profile{ padding:0 0 104px; }
-.profile .sec-head{ margin-bottom:6px; }
-.profile h2{ margin-bottom:28px; }
-.profile .p-body{ border-top:1px solid var(--rule); padding-top:26px; max-width:42em; }
-.profile .p-body p{ font-size:15px; letter-spacing:.04em; }
-.profile .p-body p + p{ margin-top:14px; }
-.profile .p-meta{
-  margin-top:32px; padding-top:14px; border-top:1px solid var(--rule);
-  max-width:42em;
-  display:flex; justify-content:space-between; gap:10px 24px; flex-wrap:wrap;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--struct);
-}
+.before-pile{ position:relative; height:220px; }
+.before-pile .receipt{ position:absolute; width:80%; }
+.before-pile .receipt:nth-child(1){ top:0; left:0; transform:rotate(-4deg); }
+.before-pile .receipt:nth-child(2){ top:26px; left:14%; transform:rotate(3deg); }
+.before-pile .receipt:nth-child(3){ top:52px; left:4%; transform:rotate(-2deg); }
+.before-pile .tag{ position:absolute; bottom:-4px; left:0; font-family:var(--font-data); font-size:10.5px; color:var(--sub); letter-spacing:.1em; }
+
+.flow-row{ margin:20px 0; display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  font-family:var(--font-data); font-size:12px; }
+.flow-row .fstep{ border:1px solid var(--ink); padding:7px 12px; }
+.flow-row .farw{ color:var(--sub); }
+
+.after-card{ border:1px solid var(--ink); padding:20px 22px; background:var(--paper); position:relative; }
+.after-card .tag{ font-family:var(--font-data); font-size:10.5px; color:var(--sub); letter-spacing:.1em; margin-bottom:10px; display:block; }
+.after-card ul{ list-style:none; font-size:14px; }
+.after-card li{ padding:6px 0; border-bottom:1px dashed var(--line); }
+.after-card li:last-child{ border-bottom:none; }
+.after-card li.chg{ font-weight:700; }
+.after-card .pin{ top:-7px; left:50%; margin-left:-7px; }
+
+.case .foot{ margin-top:44px; padding-top:24px; border-top:1px dashed var(--line); }
+.case .foot .cap{ font-family:var(--font-data); font-size:11px; color:var(--sub); letter-spacing:.14em; margin-bottom:8px; }
+.case .foot p{ font-size:13.5px; }
+.case .foot .note{ margin-top:8px; color:var(--sub); font-size:12.5px; }
 
 /* ================================================================
-   06. Rescue
+   How I Build(本当に連番なので番号を残す)
 ================================================================ */
-.rescue{ background:var(--bg2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:110px 0; }
-.rescue h2{ margin-bottom:56px; }
-.rsteps{ position:relative; padding-left:34px; }
-.rsteps::before{
-  content:""; position:absolute; left:4px; top:12px; bottom:12px; width:1px;
-  background:var(--struct);
-}
-.rstep{
-  position:relative;
-  border:1px solid var(--rule); background:var(--bg);
-  padding:26px 30px; max-width:640px;
-  margin-bottom:34px;
-}
-.rstep:last-child{ margin-bottom:0; }
-.rstep::before{ /* 縦線への接続 */
-  content:""; position:absolute; left:-30px; top:32px; width:30px; height:1px;
-  background:var(--struct);
-}
-.rstep::after{
-  content:""; position:absolute; left:-34px; top:28px; width:9px; height:9px;
-  background:var(--bg); border:1.5px solid var(--struct);
-}
-.rstep .r-tag{
-  display:flex; align-items:baseline; gap:16px; margin-bottom:10px;
-}
-.rstep .r-tag b{
-  font-family:var(--font-mono); font-weight:500; font-size:11px;
-  letter-spacing:.2em; color:var(--struct);
-}
-.rstep .r-tag .nm{ font-family:var(--font-head); font-weight:700; font-size:17px; letter-spacing:.06em; }
-.rstep .r-tag .pr{
-  margin-left:auto; font-family:var(--font-mono); font-size:14px; white-space:nowrap;
-}
-.rstep p{ font-size:14px; letter-spacing:.04em; }
-.rescue .lead-out{ margin-top:48px; font-size:15px; font-weight:500; letter-spacing:.06em; }
-.rescue .cta-row{ margin-top:28px; }
-
-.rstep.rv{ transform:translateX(-10px); }
-.rstep.rv.on{ transform:none; }
+.howto{ padding:100px 0; border-top:1px solid var(--line); }
+.steps{ margin-top:40px; display:grid; grid-template-columns:repeat(6,1fr); gap:0; border-top:1px solid var(--line); border-left:1px solid var(--line); }
+.step{ padding:20px 16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+.step .no{ font-family:var(--font-data); font-size:11px; color:var(--sub); }
+.step .nm{ margin-top:10px; font-size:14px; font-weight:500; }
+.step .nm small{ display:block; font-family:var(--font-data); font-size:10px; color:var(--sub); margin-top:4px; }
+.howto .body{ margin-top:30px; max-width:42em; font-size:15px; color:var(--sub); }
+@media (max-width:860px){ .steps{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px){ .steps{ grid-template-columns:1fr; } }
 
 /* ================================================================
-   07. Web / 08. Support  (最も静か)
+   Profile
 ================================================================ */
-.quiet{ padding:84px 0; }
-.quiet + .quiet{ padding-top:0; }
-.quiet .sec-head{ margin-bottom:6px; }
-.quiet h2{ margin-bottom:36px; }
-.quiet .sec-lede{ margin:-24px 0 32px; max-width:42em; font-size:13.5px; letter-spacing:.04em; }
-.quiet .items{ border-top:1px solid var(--rule); }
-.quiet .item{
-  display:grid; grid-template-columns:220px 1fr 140px;
-  gap:24px; align-items:baseline;
-  border-bottom:1px solid var(--rule);
-  padding:22px 4px;
-}
-.quiet .item .nm{ font-family:var(--font-head); font-weight:700; font-size:15px; letter-spacing:.06em; }
-.quiet .item p{ font-size:13.5px; letter-spacing:.04em; }
-.quiet .item .pr{ font-family:var(--font-mono); font-size:14px; text-align:right; white-space:nowrap; }
-.quiet .after-note{ margin-top:26px; font-size:13.5px; letter-spacing:.04em; }
-.quiet .cta-row{ margin-top:30px; }
-.quiet .cta-row .btn{ padding:11px 24px; font-size:13px; }
-
-/* Support:2プランを縦罫線で分けた2段組にし、Webとの同型を回避 */
-.items--support{
-  display:grid; grid-template-columns:1fr 1fr;
-  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
-}
-.items--support .item{
-  display:flex; flex-direction:column; gap:0; border-bottom:none;
-  padding:26px 30px 30px 0;
-}
-.items--support .item + .item{
-  border-left:1px solid var(--rule);
-  padding-left:30px; padding-right:0;
-}
-.items--support .item .nm{ order:-2; }
-.items--support .item .pr{ order:-1; display:block; text-align:left; margin:6px 0 12px; }
-.items--support .item p:not(.nm):not(.pr){ font-size:13.5px; }
+.profile{ padding:110px 0; border-top:1px solid var(--line); }
+.profile p{ font-size:15px; }
+.profile p + p{ margin-top:14px; }
+.profile .p-foot{ margin-top:28px; padding-top:16px; border-top:1px dashed var(--line);
+  display:flex; gap:16px; font-family:var(--font-data); font-size:11px; letter-spacing:.1em; color:var(--sub); }
+.profile .visual-col .sticky{ top:0; right:10px; }
+.profile .visual-col .paperclip{ top:100px; right:120px; transform:rotate(-16deg); }
+.profile .visual-col .tape{ top:120px; right:200px; }
 
 /* ================================================================
-   09. Pricing
+   Rescue
 ================================================================ */
-.pricing{ padding:100px 0; border-top:1px solid var(--rule); }
-.pricing h2{ margin-bottom:44px; }
-.ptable{ width:100%; border-collapse:collapse; }
-.ptable th,.ptable td{
-  border-bottom:1px solid var(--rule);
-  padding:16px 18px; text-align:left; font-size:14px; letter-spacing:.04em;
-}
-.ptable thead th{
-  font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.18em;
-  color:var(--struct); border-bottom:1px solid var(--struct); padding:10px 18px;
-}
-.ptable .cat{ font-size:12.5px; color:color-mix(in srgb, var(--ink) 72%, var(--rule)); white-space:nowrap; }
-.ptable .svc{ font-weight:500; }
-.ptable .pr{ font-family:var(--font-mono); white-space:nowrap; text-align:right; }
-.pricing .after-note{ margin-top:30px; font-size:14px; letter-spacing:.05em; }
-
-/* 主軸サービスの軽い強調(罫線・ウェイト・小さな注記のみ) */
-.ptable .row-main .svc{ font-weight:700; }
-.ptable .row-main .svc::after{
-  content:"MAIN"; font-family:var(--font-mono); font-weight:400;
-  font-size:9px; letter-spacing:.2em; color:var(--struct);
-  border:1px solid var(--rule); padding:2px 7px; margin-left:12px;
-  vertical-align:2px;
-}
-.ptable .row-main td{ border-bottom-color:var(--struct); }
-
-/* Pricing:モバイル用カテゴリ縦リスト(デスクトップでは非表示) */
-.ptable-m{ display:none; }
-.ptable-m .pm-group{ border-top:1px solid var(--rule); padding:18px 0 22px; }
-.ptable-m .pm-group:last-child{ border-bottom:1px solid var(--rule); }
-.ptable-m .pm-cat{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.18em;
-  color:var(--struct); margin-bottom:10px;
-}
-.ptable-m .pm-row{
-  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
-  padding:7px 2px; font-size:14px; letter-spacing:.04em;
-}
-.ptable-m .pm-row .pr{ font-family:var(--font-mono); white-space:nowrap; }
-.ptable-m .pm-row--main span:first-child{ font-weight:700; }
-.ptable-m .pm-row--main span:first-child::after{
-  content:"MAIN"; font-family:var(--font-mono); font-weight:400;
-  font-size:9px; letter-spacing:.2em; color:var(--struct);
-  border:1px solid var(--rule); padding:2px 6px; margin-left:10px;
-  vertical-align:2px;
-}
+.rescue{ padding:110px 0; border-top:1px solid var(--line); background:color-mix(in srgb, var(--paper) 96%, var(--ink)); }
+.rsteps{ margin-top:44px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.rstep{ border:1px solid var(--line); background:var(--paper); padding:22px 20px; position:relative; }
+.rstep:nth-child(2){ transform:rotate(.6deg); }
+.rstep:nth-child(1){ transform:rotate(-.5deg); }
+.rstep:nth-child(3){ transform:rotate(.3deg); }
+.r-tag{ display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.r-tag b{ font-family:var(--font-data); font-size:10.5px; color:var(--sub); letter-spacing:.12em; }
+.r-tag .nm{ font-weight:700; font-size:14.5px; }
+.r-tag .pr{ font-family:var(--font-data); font-size:13px; }
+.rstep p{ font-size:13.5px; color:var(--sub); }
+.lead-out{ margin-top:40px; font-family:var(--font-hand); font-size:17px; }
+@media (max-width:860px){ .rsteps{ grid-template-columns:1fr; } }
 
 /* ================================================================
-   10. FAQ  (静か)
+   Web / Support(2カードで横幅を使い切る=バランス調整)
 ================================================================ */
-.faq{ padding:84px 0 100px; }
-.faq h2{ margin-bottom:36px; }
-.faq dl{ border-top:1px solid var(--rule); }
-.faq .qa{ border-bottom:1px solid var(--rule); padding:18px 4px; }
-.faq dt{
-  font-weight:700; font-size:15px; letter-spacing:.05em;
-  display:flex; gap:14px;
-}
-.faq dt::before{ content:"Q"; font-family:var(--font-mono); font-weight:400; color:var(--struct); flex:none; }
-.faq dd{
-  margin-top:7px; font-size:14px; letter-spacing:.04em; line-height:1.75;
-  display:flex; gap:14px;
-}
-.faq dd::before{ content:"A"; font-family:var(--font-mono); color:var(--rule); flex:none; }
+.quiet{ padding:96px 0; border-top:1px solid var(--line); }
+.quiet .sec-lede{ margin-top:14px; font-size:14.5px; color:var(--sub); max-width:40em; }
+.items{ margin-top:36px; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.item{ border:1px solid var(--line); padding:24px 22px; background:var(--paper); }
+.item:nth-child(odd){ transform:rotate(-.5deg); }
+.item:nth-child(even){ transform:rotate(.5deg); }
+.item .nm{ font-weight:700; font-size:15px; }
+.item p:not(.nm):not(.pr){ margin-top:10px; font-size:13.5px; color:var(--sub); }
+.item .pr{ margin-top:14px; font-family:var(--font-data); font-size:15px; }
+.after-note{ margin-top:28px; font-size:13.5px; color:var(--sub); }
+@media (max-width:700px){ .items{ grid-template-columns:1fr; } }
 
 /* ================================================================
-   11. CTA
+   Pricing
 ================================================================ */
-.cta{
-  border-top:1px solid var(--struct);
-  padding:130px 0 120px;
-  position:relative; overflow:hidden;
-}
-.cta .inner{ position:relative; z-index:2; text-align:center; }
-.cta-fig{ width:min(560px,86%); margin:0 auto 44px; }
-.cta-fig svg{ width:100%; height:auto; overflow:visible; }
-.cta h2{ font-size:clamp(26px,3.2vw,36px); margin-bottom:44px; }
-.cta .btns{
-  display:flex; flex-wrap:wrap; gap:16px; justify-content:center;
-}
-.cta .note{
-  margin-top:36px; font-size:12.5px; letter-spacing:.05em;
-  color:color-mix(in srgb, var(--ink) 75%, var(--rule));
-}
-
-/* footer */
-.site-footer{
-  border-top:1px solid var(--rule);
-  padding:28px 0;
-}
-.site-footer .inner{
-  max-width:var(--w-wide); margin:0 auto; padding:0 32px;
-  display:flex; flex-direction:column; gap:12px;
-  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.18em; color:var(--struct);
-}
-.site-footer .frow{
-  display:flex; justify-content:space-between; align-items:baseline;
-  flex-wrap:wrap; gap:8px 24px;
-}
-.site-footer .f-contact{
-  border-bottom:1px solid var(--rule); padding-bottom:2px;
-  transition:border-color .2s;
-}
-.site-footer .f-contact:hover{ border-color:var(--struct); }
+.pricing{ padding:110px 0; border-top:1px solid var(--line); }
+.ptable{ margin-top:40px; width:100%; border-collapse:collapse; }
+.ptable th,.ptable td{ border-bottom:1px solid var(--line); padding:15px 16px; text-align:left; font-size:13.5px; }
+.ptable thead th{ font-family:var(--font-data); font-size:10.5px; letter-spacing:.14em; color:var(--sub); border-bottom:1px solid var(--ink); }
+.ptable .cat{ font-size:12px; color:var(--sub); white-space:nowrap; }
+.ptable .pr{ font-family:var(--font-data); text-align:right; white-space:nowrap; }
+.ptable tr.row-main td{ font-weight:700; border-bottom-color:var(--ink); }
+.ptable-m{ display:none; margin-top:30px; }
+.ptable-m .pm-group{ border-top:1px solid var(--line); padding:16px 0 20px; }
+.ptable-m .pm-cat{ font-family:var(--font-data); font-size:10.5px; color:var(--sub); letter-spacing:.14em; margin-bottom:8px; }
+.ptable-m .pm-row{ display:flex; justify-content:space-between; padding:6px 0; font-size:13.5px; }
+.ptable-m .pm-row .pr{ font-family:var(--font-data); }
+.pricing .after-note{ margin-top:24px; }
+@media (max-width:700px){ .ptable{ display:none; } .ptable-m{ display:block; } }
 
 /* ================================================================
-   Responsive / Motion
+   FAQ(付箋アコーディオン)
 ================================================================ */
-@media (max-width:960px){
-  .hero .inner{ grid-template-columns:1fr; padding:56px 24px 72px; gap:40px; }
-  .hero{ min-height:0; }
-  .case .layout{ grid-template-columns:1fr; }
-  /* Case Study:スクロール連動をやめ、縦型の静的フロー図として一望できる表示に */
-  .case-fig-wrap{ display:none; }
-  .stage{ min-height:0; padding:28px 0 30px; }
-  .stage + .stage{ margin-top:36px; }
-  .stage + .stage::before{
-    content:"↓"; position:absolute; top:-32px; left:2px;
-    font-family:var(--font-mono); font-size:15px; color:var(--struct);
-  }
-  .stage{ position:relative; }
-  .stage .st-tag::before{ background:var(--struct); } /* 全段を確定表示 */
-  .stage--after .st-tag::before{ background:var(--accent); }
-  .steps{ grid-template-columns:repeat(2,1fr); border-left:1px solid var(--rule); }
-  .steps::before{ display:none; }
-  .step{ border-bottom:1px solid var(--rule); }
-  .step .dot{ display:none; }
-  .quiet .item{ grid-template-columns:1fr; gap:6px; }
-  .quiet .item .pr{ text-align:left; }
-  .items--support{ grid-template-columns:1fr; }
-  .items--support .item{ padding:22px 0 24px; }
-  .items--support .item + .item{ border-left:none; border-top:1px solid var(--rule); padding-left:0; }
-  .container, .container--wide, .container--narrow{ padding:0 24px; }
-  .gnav a:not(.nav-cta){ display:none; }
-}
-@media (max-width:700px){
-  /* System:プラン表を縦のまとまりに(横スクロール・文字圧縮を回避) */
-  .plans thead{ display:none; }
-  .plans, .plans tbody, .plans tr, .plans td{ display:block; width:100%; }
-  .plans tr{ border:1px solid var(--rule); margin-bottom:-1px; padding:18px 20px 20px; }
-  .plans td{ border:none; padding:0; }
-  .plans .pname{ font-size:16px; }
-  .plans .price{ margin:6px 0 8px; }
-  .plans td:last-child{ font-size:13px; letter-spacing:.03em; }
-  /* Pricing:表を隠し、カテゴリ単位の縦リストへ */
-  .ptable{ display:none; }
-  .ptable-m{ display:block; }
-}
-@media (max-width:600px){
-  /* Header:狭幅ではブランド表記を短縮し、衝突を回避 */
-  .brand{ font-size:13px; }
-  .brand .b-full{ display:none; }
-  .brand .b-short{ display:inline; }
-  .brand small{ display:none; }
-  .gnav .nav-cta{ padding:7px 14px; font-size:11px; letter-spacing:.06em; }
-}
-@media (max-width:360px){
-  /* 極小幅での見出し折り返し崩れのみ修正(デザイン変更なし) */
-  .hero h1{ font-size:27px; }
-}
-@media (max-width:960px){
-  /* モバイルは演出簡略化:静止+フェードのみ */
-  .seg,.node,.lbl,.joint,.dim,.dimtxt{ transition:none !important; }
-  .hero-fig .seg{ transform:none; opacity:1; }
-  .hero-fig .node{ transform:none; opacity:1; }
-  .hero-fig .lbl,.hero-fig .joint,.hero-fig .dim,.hero-fig .dimtxt{ opacity:1; }
-  .hero-fig{ opacity:0; transform:translateY(10px); transition:opacity .8s var(--ease) .2s, transform .8s var(--ease) .2s; }
-  .hero-fig.mb-on{ opacity:1; transform:none; }
-  .case-fig .box,.case-fig .link,.case-fig .out{ transition:opacity .7s var(--ease); }
-}
+.faq{ padding:100px 0; border-top:1px solid var(--line); }
+.faq .qa{ border-bottom:1px solid var(--line); }
+.faq .qa summary{ list-style:none; cursor:pointer; padding:20px 4px; display:flex; gap:14px; font-weight:700; font-size:15px; }
+.faq .qa summary::-webkit-details-marker{ display:none; }
+.faq .qa summary::before{ content:"Q"; font-family:var(--font-data); color:var(--sub); flex:none; }
+.faq .qa summary .qtext{ flex:1 1 0%; min-width:0; }
+.faq .qa summary .plus{ margin-left:auto; font-family:var(--font-data); color:var(--sub); flex:none; }
+.faq .qa[open] summary .plus{ transform:rotate(45deg); display:inline-block; }
+.faq .qa .a{ display:flex; gap:14px; padding:0 4px 22px; font-size:14px; color:var(--sub); }
+.faq .qa .a::before{ content:"A"; font-family:var(--font-data); color:var(--line); flex:none; }
+.faq .qa .a .atext{ flex:1 1 0%; min-width:0; }
+
+/* ================================================================
+   CTA
+================================================================ */
+.cta{ padding:120px 0 130px; border-top:1px solid var(--ink); text-align:center; position:relative; }
+.cta-stage{ position:relative; display:inline-block; }
+.cta h2{ font-size:clamp(24px,3vw,32px); margin-bottom:16px; }
+.cta .cta-lede{ font-size:14.5px; color:var(--sub); margin-bottom:38px; }
+.cta .btns{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; }
+.cta .note{ margin-top:32px; font-size:12.5px; color:var(--sub); }
+.cta .prop.sticky-note{ top:-64px; left:-100px; transform:rotate(-7deg); }
+@media (max-width:640px){ .cta .prop{ display:none; } }
+
+/* ================================================================
+   Footer
+================================================================ */
+.site-footer{ border-top:1px solid var(--line); padding:26px 0; }
+.site-footer .frow{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px 24px;
+  font-family:var(--font-data); font-size:10.5px; letter-spacing:.14em; color:var(--sub); }
+.site-footer .f-contact{ border-bottom:1px solid var(--line); padding-bottom:2px; }
+.site-footer .f-contact:hover{ border-color:var(--accent); color:var(--ink); }
+
 @media (prefers-reduced-motion:reduce){
-  html{ scroll-behavior:auto; }
   *{ transition:none !important; animation:none !important; }
-  .seg,.node{ transform:none !important; opacity:1 !important; }
-  .lbl,.joint,.dim,.dimtxt{ opacity:1 !important; }
   .rv{ opacity:1; transform:none; }
+  .hero .prop{ opacity:1 !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- ============ Header ============ -->
 <header class="site-header">
-  <div class="inner">
-    <div class="brand"><span class="b-full">業務を整理し、仕組みに変える。</span><span class="b-short">業務を、仕組みに。</span><small>PHP / LARAVEL</small></div>
-    <nav class="gnav" aria-label="主要ナビゲーション">
+  <div class="container">
+    <div class="brand">
+      <span class="name">大島一樹</span>
+      <small>PHP / LARAVEL — SYSTEM · RESCUE · WEB</small>
+    </div>
+    <nav class="gnav">
       <a href="#system">SYSTEM</a>
       <a href="#rescue">RESCUE</a>
       <a href="#web">WEB</a>
@@ -801,187 +368,121 @@ h2{
 
 <main>
 
-<!-- ============ 01. Hero ============ -->
+<!-- ============ Hero ============ -->
 <section class="hero" id="hero">
-  <div class="hero-grid" id="heroGrid" aria-hidden="true"></div>
-  <div class="inner">
-    <div class="hero-copy">
-      <h1>業務を整理し、<br>仕組みに変える。</h1>
-      <p class="lede">Web制作から、業務システム開発、既存システムの調査・改修まで。</p>
-      <div class="hero-tags">
-        <div class="tag"><b>SYSTEM</b><span>業務システム開発</span></div>
-        <div class="tag"><b>RESCUE</b><span>既存システムの調査・改修</span></div>
-        <div class="tag"><b>WEB</b><span>ホームページ・LP制作</span></div>
-      </div>
-      <div class="hero-cta">
-        <a class="btn" href="#cta">まずは相談する<span class="arw">→</span></a>
-      </div>
-    </div>
-
-    <!-- 業務フローが線でつながる図 -->
-    <figure class="hero-fig" id="heroFig" aria-label="バラバラの業務が一つの流れとして接続されていく図">
-      <svg viewBox="0 0 680 440" role="img">
-        <!-- 接続線(初期状態:散在) -->
-        <g class="seg" style="--tx:-34px; --ty:26px;  --r:-14deg; --d:.15s"><line x1="140" y1="366" x2="168" y2="366"/></g>
-        <g class="seg" style="--tx:22px;  --ty:38px;  --r:9deg;   --d:.25s"><line x1="168" y1="366" x2="168" y2="274"/></g>
-        <g class="seg" style="--tx:-18px; --ty:-30px; --r:18deg;  --d:.35s"><line x1="168" y1="274" x2="196" y2="274"/></g>
-
-        <g class="seg" style="--tx:30px;  --ty:-24px; --r:-11deg; --d:.45s"><line x1="308" y1="274" x2="336" y2="274"/></g>
-        <g class="seg" style="--tx:-26px; --ty:20px;  --r:7deg;   --d:.55s"><line x1="336" y1="274" x2="336" y2="182"/></g>
-        <g class="seg" style="--tx:16px;  --ty:34px;  --r:-16deg; --d:.65s"><line x1="336" y1="182" x2="364" y2="182"/></g>
-
-        <g class="seg" style="--tx:-22px; --ty:-36px; --r:12deg;  --d:.75s"><line x1="476" y1="182" x2="504" y2="182"/></g>
-        <g class="seg" style="--tx:28px;  --ty:18px;  --r:-8deg;  --d:.85s"><line x1="504" y1="182" x2="504" y2="90"/></g>
-        <g class="seg" style="--tx:-30px; --ty:24px;  --r:15deg;  --d:.95s"><line x1="504" y1="90"  x2="532" y2="90"/></g>
-
-        <!-- 接続点 -->
-        <circle class="joint" cx="168" cy="366" r="3"/>
-        <circle class="joint" cx="168" cy="274" r="3"/>
-        <circle class="joint" cx="336" cy="274" r="3"/>
-        <circle class="joint" cx="336" cy="182" r="3"/>
-        <circle class="joint" cx="504" cy="182" r="3"/>
-        <circle class="joint" cx="504" cy="90"  r="3"/>
-
-        <!-- ノード(業務の工程) -->
-        <g class="node" style="--tx:-26px; --ty:22px;  --d:.55s">
-          <rect x="28" y="340" width="112" height="52"/>
-          <text class="nlabel lbl" x="84" y="371" text-anchor="middle" style="--d:1.5s">入 力</text>
-          <text class="nsub lbl"   x="84" y="408" text-anchor="middle" style="--d:1.6s">01 — INPUT</text>
-        </g>
-        <g class="node" style="--tx:20px; --ty:-26px; --d:.75s">
-          <rect x="196" y="248" width="112" height="52"/>
-          <text class="nlabel lbl" x="252" y="279" text-anchor="middle" style="--d:1.6s">確 認</text>
-          <text class="nsub lbl"   x="252" y="316" text-anchor="middle" style="--d:1.7s">02 — CHECK</text>
-        </g>
-        <g class="node" style="--tx:-18px; --ty:-24px; --d:.95s">
-          <rect x="364" y="156" width="112" height="52"/>
-          <text class="nlabel lbl" x="420" y="187" text-anchor="middle" style="--d:1.7s">処 理</text>
-          <text class="nsub lbl"   x="420" y="224" text-anchor="middle" style="--d:1.8s">03 — PROCESS</text>
-        </g>
-        <g class="node" style="--tx:26px; --ty:20px; --d:1.15s">
-          <rect x="532" y="64" width="112" height="52"/>
-          <text class="nlabel lbl" x="588" y="95"  text-anchor="middle" style="--d:1.8s">出 力</text>
-          <text class="nsub lbl"   x="588" y="132" text-anchor="middle" style="--d:1.9s">04 — OUTPUT</text>
-        </g>
-
-        <!-- 寸法線(注記) -->
-        <line class="dim" x1="28"  y1="428" x2="644" y2="428"/>
-        <line class="dim" x1="28"  y1="423" x2="28"  y2="433"/>
-        <line class="dim" x1="644" y1="423" x2="644" y2="433"/>
-        <text class="dimtxt" x="336" y="422" text-anchor="middle">BUSINESS FLOW — CONNECTED</text>
-      </svg>
-      <figcaption class="fig-note">
-        <span>FIG. 01</span>
-        <span>分断された業務を、ひとつの構造へ</span>
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============ 02. Problem ============ -->
-<section class="problem" id="problem">
-  <div class="container container--narrow">
-    <div class="sec-head">
-      <span class="sec-num">02</span>
-      <span class="sec-label">Problem</span>
-    </div>
-    <h2 class="h2-mid rv">こんな状態、ありませんか。</h2>
-    <ul>
-      <li class="rv"><span class="idx">a.</span>Excelでの管理が、年々増え続けている</li>
-      <li class="rv"><span class="idx">b.</span>同じ情報を、部署をまたいで何度も入力している</li>
-      <li class="rv"><span class="idx">c.</span>現場と管理側で、情報が分断されている</li>
-      <li class="rv"><span class="idx">d.</span>請求や締め処理の確認が、特定の人に頼っている</li>
-      <li class="rv"><span class="idx">e.</span>以前作られたシステムを、誰も触れなくなっている</li>
-    </ul>
-    <p class="closing rv"><span class="lead-line" aria-hidden="true"></span>その状態を、ひとつの流れに変えていきます。</p>
-  </div>
-</section>
-
-<!-- ============ 03. System ============ -->
-<section class="system" id="system">
-  <div class="container container--wide">
-    <div class="frame">
-      <div class="sec-head">
-        <span class="sec-num">03</span>
-        <span class="sec-label">System Development</span>
-      </div>
-      <h2 class="h2-major">バラバラの業務を、<br>ひとつの流れに。</h2>
-      <p class="desc">顧客管理、予約管理、日報、請求管理など、複数の業務を組み合わせたシステムを、要件整理から設計・実装・運用まで一貫して担当します。</p>
-
-      <div class="domains">
-        <p class="dhead">DOMAINS — これまで対応してきた領域</p>
-        <ul>
-          <li>顧客管理</li>
-          <li>予約管理</li>
-          <li>日報管理</li>
-          <li>請求・支払管理</li>
-          <li>PDF帳票</li>
-          <li>管理画面</li>
-          <li>現場向けフロント</li>
-          <li>LINEなどの外部サービス連携</li>
-        </ul>
+  <div class="container">
+    <div class="grid-2">
+      <div>
+        <h1>業務を整理し、<br>仕組みに変える。</h1>
+        <p class="lede">Web制作から、業務システム開発、既存システムの調査・改修まで。<span style="white-space:nowrap">打ち合わせ</span>から実装、確認まで、大島一人が<span style="white-space:nowrap">窓口</span>として対応します。</p>
+        <div class="hero-cta">
+          <a class="btn" href="#cta">まずは相談する<span class="arw">→</span></a>
+        </div>
       </div>
 
-      <table class="plans">
-        <caption>PLANS</caption>
-        <thead>
-          <tr><th>PLAN</th><th>PRICE</th><th>SCOPE</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="pname">小規模Webシステム</td>
-            <td class="price"><em>30</em>万円〜</td>
-            <td>単機能を中心とした管理画面など</td>
-          </tr>
-          <tr>
-            <td class="pname">業務システム開発</td>
-            <td class="price price--main"><em>100</em>万円〜</td>
-            <td>複数機能を組み合わせた業務システム</td>
-          </tr>
-          <tr>
-            <td class="pname">大規模・複合システム</td>
-            <td class="price">個別見積もり</td>
-            <td>複数部門・複雑な権限管理を伴うシステム</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="visual-col" id="heroVisual">
+        <div class="prop tilt p-tape1 tape" data-land="0,-40,-24"></div>
+        <div class="prop tilt p-sticky1 sticky y paper-shadow" data-land="0,-2,6">まず話を聞くだけでもOKです</div>
 
-      <div class="cta-row">
-        <a class="btn btn--struct" href="#cta">業務システムについて相談する<span class="arw">→</span></a>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="prop tilt p-pin1 pin red" data-land="0,-1,0"></div>
 
-<!-- ============ 04. Case Study ============ -->
-<section class="case" id="case">
-  <div class="container container--wide">
-    <div class="sec-head">
-      <span class="sec-num">04</span>
-      <span class="sec-label">Case Study</span>
-    </div>
-    <h2 class="h2-major">ある運送会社の場合</h2>
-    <p class="case-lede rv">現場では紙の伝票、事務所ではExcel。月末になると、電話や口頭で内容を確認しながら請求書を作成していました。そこで、現場入力から確認、締め処理、請求候補の作成までを、一つの流れとして整理しました。</p>
-
-    <div class="layout">
-      <div class="stages">
-        <div class="stage stage--before" data-stage="before">
-          <p class="st-tag">BEFORE</p>
+        <div class="prop tilt p-tape2 tape" data-land="0,-8,10"></div>
+        <div class="prop tilt p-card1 card card-tags paper-shadow" data-land="0,0,-2.5">
           <ul>
-            <li>紙の伝票</li>
-            <li>Excel管理</li>
-            <li>電話・口頭での確認</li>
-            <li>個別のPDF作成</li>
+            <li>SYSTEM — 業務システム開発</li>
+            <li>RESCUE — 既存システムの調査・改修</li>
+            <li>WEB — ホームページ・LP制作</li>
           </ul>
         </div>
-        <div class="stage stage--flow" data-stage="flow">
-          <p class="st-tag">SYSTEM FLOW</p>
-          <p class="flow-inline">
-            <span class="fstep">現場入力</span><span class="farw">→</span><span class="fstep">管理側での確認</span><span class="farw">→</span><span class="fstep">締め処理</span><span class="farw">→</span><span class="fstep">請求候補の作成</span>
-          </p>
+        <svg class="prop tilt p-clip1 paperclip" viewBox="0 0 30 46" data-land="0,4,8">
+          <path d="M8 6 C8 2 14 2 14 6 L14 34 C14 40 22 40 22 34 L22 14"/>
+        </svg>
+        <div class="prop tilt p-sticky2 sticky b paper-shadow" data-land="0,3,-6">現状把握 → 整理 → 実装</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Problem ============ -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="grid-2">
+      <div>
+        <div class="eyebrow"><span class="tape-chip">PROBLEM</span></div>
+        <h2 class="h2-mid rv">こんな状態、ありませんか。</h2>
+        <div class="receipt-stack" style="margin-top:36px;">
+          <div class="receipt receipt-edge rv">Excelでの管理が、年々増え続けている</div>
+          <div class="receipt receipt-edge rv">同じ情報を、部署をまたいで何度も入力している</div>
+          <div class="receipt receipt-edge rv">現場と管理側で、情報が分断されている</div>
+          <div class="receipt receipt-edge rv">請求や締め処理の確認が、特定の人に頼っている</div>
+          <div class="receipt receipt-edge rv">以前作られたシステムを、誰も触れなくなっている</div>
         </div>
-        <div class="stage stage--after" data-stage="after">
-          <p class="st-tag">AFTER</p>
+        <p class="closing rv">その状態を、ひとつの流れに変えていきます。</p>
+      </div>
+      <div class="visual-col">
+        <div class="prop sticky p paper-shadow">積み重なると、<br>見えなくなる。</div>
+        <div class="prop tape"></div>
+        <svg class="prop paperclip" viewBox="0 0 30 46"><path d="M8 6 C8 2 14 2 14 6 L14 34 C14 40 22 40 22 34 L22 14"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ System ============ -->
+<section class="system" id="system">
+  <div class="container container--narrow">
+    <div class="eyebrow"><span class="tape-chip">SYSTEM DEVELOPMENT</span></div>
+    <h2 class="h2-major rv">バラバラの業務を、<br>ひとつの流れに。</h2>
+    <p class="desc rv">顧客管理、予約管理、日報、請求管理など、複数の業務を組み合わせたシステムを、<span style="white-space:nowrap">要件整理</span>から設計・実装・運用まで一貫して担当します。</p>
+
+    <div class="domains rv">
+      <p class="dhead">DOMAINS — これまで対応してきた領域</p>
+      <ul>
+        <li>顧客管理</li><li>予約管理</li><li>日報管理</li><li>請求・支払管理</li>
+        <li>PDF帳票</li><li>管理画面</li><li>現場向けフロント</li><li>LINEなどの外部サービス連携</li>
+      </ul>
+    </div>
+
+    <table class="plans rv">
+      <thead><tr><th>PLAN</th><th>PRICE</th><th>SCOPE</th></tr></thead>
+      <tbody>
+        <tr><td>小規模Webシステム</td><td class="price"><em>30</em>万円〜</td><td>単機能を中心とした管理画面など</td></tr>
+        <tr class="row-main"><td>業務システム開発</td><td class="price"><em>100</em>万円〜</td><td>複数機能を組み合わせた業務システム</td></tr>
+        <tr><td>大規模・複合システム</td><td class="price">個別見積もり</td><td>複数部門・複雑な権限管理を伴うシステム</td></tr>
+      </tbody>
+    </table>
+
+    <div class="cta-row rv"><a class="btn btn--outline" href="#cta" style="border-color:var(--ink)">業務システムについて相談する<span class="arw">→</span></a></div>
+  </div>
+</section>
+
+<!-- ============ Case Study ============ -->
+<section class="case" id="case">
+  <div class="container">
+    <div class="eyebrow"><span class="tape-chip">CASE STUDY</span></div>
+    <h2 class="h2-major rv">ある運送会社の場合</h2>
+    <p class="case-lede rv">現場では紙の伝票、事務所ではExcel。月末になると、電話や口頭で内容を確認しながら請求書を作成していました。そこで、現場入力から確認、締め処理、請求候補の作成までを、一つの流れとして<span style="white-space:nowrap">整理しました。</span></p>
+
+    <div class="layout">
+      <div class="rv">
+        <p style="font-family:var(--font-data); font-size:11px; color:var(--sub); letter-spacing:.14em; margin-bottom:16px;">BEFORE</p>
+        <div class="before-pile">
+          <div class="receipt receipt-edge">紙の伝票</div>
+          <div class="receipt receipt-edge">Excel管理</div>
+          <div class="receipt receipt-edge">電話・口頭での確認</div>
+        </div>
+        <div class="flow-row" style="margin-top:26px;">
+          <span class="fstep">現場入力</span><span class="farw">→</span>
+          <span class="fstep">確認</span><span class="farw">→</span>
+          <span class="fstep">締め処理</span><span class="farw">→</span>
+          <span class="fstep">請求候補</span>
+        </div>
+      </div>
+      <div class="rv" style="position:relative;">
+        <p style="font-family:var(--font-data); font-size:11px; color:var(--accent); letter-spacing:.14em; margin-bottom:16px;">AFTER</p>
+        <div class="after-card">
+          <div class="pin blue"></div>
+          <span class="tag">SYSTEM</span>
           <ul>
             <li class="chg">請求候補の自動生成</li>
             <li>PDFの発行</li>
@@ -989,39 +490,9 @@ h2{
           </ul>
         </div>
       </div>
-
-      <div class="case-fig-wrap">
-        <div class="case-fig" id="caseFig" data-stage="before" aria-hidden="true">
-          <div class="cf-head">
-            <span>FIG. 02 — CASE</span>
-            <span class="cf-stagelabel" id="cfLabel">BEFORE</span>
-          </div>
-          <div class="box b1">
-            <span class="lb">紙の伝票<small>PAPER</small></span>
-            <span class="lf">現場入力<small>01 — INPUT</small></span>
-          </div>
-          <div class="box b2">
-            <span class="lb">Excel管理<small>SHEET</small></span>
-            <span class="lf">管理側での確認<small>02 — CHECK</small></span>
-          </div>
-          <div class="box b3">
-            <span class="lb">口頭確認<small>VERBAL</small></span>
-            <span class="lf">締め処理<small>03 — CLOSE</small></span>
-          </div>
-          <div class="box b4">
-            <span class="lb">個別PDF<small>PDF</small></span>
-            <span class="lf">請求候補の作成<small>04 — DRAFT</small></span>
-          </div>
-          <div class="vlink v1"></div>
-          <div class="vlink v2"></div>
-          <div class="vlink v3"></div>
-          <div class="hlink"></div>
-          <div class="out">請求候補の自動生成</div>
-        </div>
-      </div>
     </div>
 
-    <div class="foot">
+    <div class="foot rv">
       <p class="cap">SCOPE — 対応領域</p>
       <p>管理画面 / 現場向け入力画面 / 日報管理 / 請求・支払管理 / PDF帳票</p>
       <p class="note">※社名・詳細な機能名は非公開としています。</p>
@@ -1029,263 +500,186 @@ h2{
   </div>
 </section>
 
-<!-- ============ 05. How I Build ============ -->
+<!-- ============ How I Build ============ -->
 <section class="howto" id="how">
   <div class="container">
-    <div class="sec-head">
-      <span class="sec-num">05</span>
-      <span class="sec-label">How I Build</span>
-    </div>
-    <h2 class="h2-mid">速さのために、確認を省かない。</h2>
-
-    <ol class="steps" id="buildSteps">
-      <li class="step"><span class="dot"></span><span class="no">S-01</span><p class="nm">要件整理<small>DEFINE</small></p></li>
-      <li class="step"><span class="dot"></span><span class="no">S-02</span><p class="nm">設計<small>DESIGN</small></p></li>
-      <li class="step"><span class="dot"></span><span class="no">S-03</span><p class="nm">実装(AIを活用)<small>BUILD</small></p></li>
-      <li class="step"><span class="dot"></span><span class="no">S-04</span><p class="nm">テスト<small>TEST</small></p></li>
-      <li class="step"><span class="dot"></span><span class="no">S-05</span><p class="nm">レビュー<small>REVIEW</small></p></li>
-      <li class="step"><span class="dot"></span><span class="no">S-06</span><p class="nm">改善<small>IMPROVE</small></p></li>
+    <div class="eyebrow"><span class="tape-chip">HOW I BUILD</span></div>
+    <h2 class="h2-mid rv">速さのために、確認を省かない。</h2>
+    <ol class="steps rv" style="list-style:none;">
+      <li class="step"><span class="no">S-01</span><p class="nm">要件整理<small>DEFINE</small></p></li>
+      <li class="step"><span class="no">S-02</span><p class="nm">設計<small>DESIGN</small></p></li>
+      <li class="step"><span class="no">S-03</span><p class="nm">実装(AIを活用)<small>BUILD</small></p></li>
+      <li class="step"><span class="no">S-04</span><p class="nm">テスト<small>TEST</small></p></li>
+      <li class="step"><span class="no">S-05</span><p class="nm">レビュー<small>REVIEW</small></p></li>
+      <li class="step"><span class="no">S-06</span><p class="nm">改善<small>IMPROVE</small></p></li>
     </ol>
-
-    <p class="body rv">開発の一部にAIを取り入れていますが、要件の分解や対象範囲の見極め、実装後の確認、そして最終的な判断は人が行っています。少人数であっても、確認を省かない体制を保つようにしています。</p>
+    <p class="body rv">開発の一部にAIを取り入れていますが、要件の分解や対象範囲の見極め、実装後の確認、そして<span style="white-space:nowrap">最終的</span>な判断は人が行っています。少人数であっても、確認を省かない体制を保つようにしています。</p>
   </div>
 </section>
 
-<!-- ============ 06. Profile ============ -->
+<!-- ============ Profile ============ -->
 <section class="profile" id="profile">
-  <div class="container container--narrow">
-    <div class="sec-head">
-      <span class="sec-num">06</span>
-      <span class="sec-label">Profile</span>
-    </div>
-    <h2 class="h2-quiet rv">はじめまして、大島です。</h2>
-    <div class="p-body rv">
-      <p>Web制作から業務システム開発、既存システムの調査・改修まで対応しています。</p>
-      <p>まだ要件が整理されていない状態でも、現在の業務や困っていることを伺いながら、一つずつ整理していきます。</p>
-      <p>打ち合わせから設計、実装、確認まで、私自身が責任を持って対応します。</p>
-    </div>
-    <div class="p-meta rv">
-      <span>KAZUKI OSHIMA</span>
-      <span>WEB / SYSTEM DEVELOPMENT — PHP / LARAVEL</span>
+  <div class="container">
+    <div class="grid-2 reverse">
+      <div>
+        <div class="eyebrow"><span class="tape-chip">PROFILE</span></div>
+        <h2 class="h2-mid rv">はじめまして、大島です。</h2>
+        <div class="rv" style="margin-top:24px;">
+          <p>現場でExcelや紙の管理が少しずつ積み重なっていく様子や、担当者が変わるたびに情報がうまく引き継がれず止まってしまう場面を、これまで何度か見てきました。そうした状態を、話を聞きながら一つずつ整理していく仕事に、<span style="white-space:nowrap">面白さ</span>を感じています。</p>
+          <p>まだ要件が整理されていない状態でも大丈夫です。現在の業務の流れや困っていることを伺うところから、一緒に整理していきます。</p>
+          <p>打ち合わせから設計、実装、確認まで、基本的に私一人で対応しています。<span style="white-space:nowrap">窓口</span>が変わらないぶん、判断や連絡に余計な時間がかからないことは、一人で続けている理由のひとつです。</p>
+        </div>
+        <div class="p-foot rv">
+          <span>KAZUKI OSHIMA</span>
+          <span>WEB / SYSTEM DEVELOPMENT — PHP / LARAVEL</span>
+        </div>
+      </div>
+      <div class="visual-col">
+        <div class="prop sticky p paper-shadow">相談だけでも、お気軽に</div>
+        <div class="prop tape"></div>
+        <svg class="prop paperclip" viewBox="0 0 30 46"><path d="M8 6 C8 2 14 2 14 6 L14 34 C14 40 22 40 22 34 L22 14"/></svg>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 07. Rescue ============ -->
+<!-- ============ Rescue ============ -->
 <section class="rescue" id="rescue">
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-num">07</span>
-      <span class="sec-label">Rescue — 既存システム支援</span>
-    </div>
-    <h2 class="h2-mid">誰も触れないシステムからでも、<br>始められます。</h2>
-
+  <div class="container container--narrow">
+    <div class="eyebrow"><span class="tape-chip">RESCUE — 既存システム支援</span></div>
+    <h2 class="h2-mid rv">誰も触れないシステムからでも、<br>始められます。</h2>
     <div class="rsteps">
       <div class="rstep rv">
         <div class="r-tag"><b>STEP 1</b><span class="nm">調べる — システム健康診断</span><span class="pr">5万円</span></div>
-        <p>既存システムの構造や問題点を調査し、レポートにまとめます。</p>
+        <p>既存システムの構造や問題点を調査し、<span style="white-space:nowrap">レポート</span>にまとめます。</p>
       </div>
       <div class="rstep rv">
-        <div class="r-tag"><b>STEP 2</b><span class="nm">整理する — 仕様書復元・システム解析</span><span class="pr">20万円〜</span></div>
-        <p>調査結果をもとに、仕様書や構成図を整理します。</p>
+        <div class="r-tag"><b>STEP 2</b><span class="nm">整理する — 仕様書復元・<span style="white-space:nowrap">システム解析</span></span><span class="pr">20万円〜</span></div>
+        <p>調査結果をもとに、仕様書や構成図を<span style="white-space:nowrap">整理します。</span></p>
       </div>
       <div class="rstep rv">
         <div class="r-tag"><b>STEP 3</b><span class="nm">直す — スポット改修</span><span class="pr">5万円〜</span></div>
         <p>影響範囲を確認したうえで、機能追加や不具合修正を行います。</p>
       </div>
     </div>
-
     <p class="lead-out rv">まずは、現状を知ることから始められます。</p>
-    <div class="cta-row rv">
-      <a class="btn btn--struct" href="#cta">既存システムについて相談する<span class="arw">→</span></a>
-    </div>
+    <div class="cta-row rv"><a class="btn btn--outline" style="border-color:var(--ink)" href="#cta">既存システムについて相談する<span class="arw">→</span></a></div>
   </div>
 </section>
 
-<!-- ============ 08. Web ============ -->
+<!-- ============ Web ============ -->
 <section class="quiet" id="web">
   <div class="container container--narrow">
-    <div class="sec-head">
-      <span class="sec-num">08</span>
-      <span class="sec-label">Web</span>
+    <div class="eyebrow"><span class="tape-chip">WEB</span></div>
+    <h2 class="h2-mid rv">小さく始めたい方へ。</h2>
+    <div class="items rv">
+      <div class="item"><p class="nm">HP制作</p><p>1〜3ページ程度の小規模なサイト制作。</p><p class="pr">5万円〜</p></div>
+      <div class="item"><p class="nm">LP制作</p><p>サービスや商品を紹介する、1ページ構成の<span style="white-space:nowrap">サイト制作。</span></p><p class="pr">10万円〜</p></div>
     </div>
-    <h2 class="h2-quiet">小さく始めたい方へ。</h2>
-    <div class="items">
-      <div class="item">
-        <p class="nm">HP制作</p>
-        <p>1〜3ページ程度の小規模なサイト制作。</p>
-        <p class="pr">5万円〜</p>
-      </div>
-      <div class="item">
-        <p class="nm">LP制作</p>
-        <p>サービスや商品を紹介する、1ページ構成のサイト制作。</p>
-        <p class="pr">10万円〜</p>
-      </div>
-    </div>
-    <p class="after-note">HP・LP制作では、月額の保守契約は必須ではありません。公開後の修正や追加は、必要なタイミングで個別に対応します。サーバー・ドメインなどの利用費用は別途必要です。</p>
-    <div class="cta-row">
-      <a class="btn" href="#cta">Web制作について相談する<span class="arw">→</span></a>
-    </div>
+    <p class="after-note rv">HP・LP制作では、月額の保守契約は必須ではありません。公開後の修正や追加は、必要なタイミングで個別に対応します。<span style="white-space:nowrap">サーバー・ドメイン</span>などの利用費用は別途必要です。</p>
+    <div class="cta-row rv"><a class="btn btn--outline" style="border-color:var(--ink)" href="#cta">Web制作について相談する<span class="arw">→</span></a></div>
   </div>
 </section>
 
-<!-- ============ 09. Support ============ -->
+<!-- ============ Support ============ -->
 <section class="quiet" id="support">
   <div class="container container--narrow">
-    <div class="sec-head">
-      <span class="sec-num">09</span>
-      <span class="sec-label">Support — システム保守・継続支援</span>
+    <div class="eyebrow"><span class="tape-chip">SUPPORT — システム保守・継続支援</span></div>
+    <h2 class="h2-mid rv">作って終わりにしない。</h2>
+    <p class="sec-lede rv">保守契約は任意です。主に業務システムや、継続的な運用支援を必要とする方向けのプランです。</p>
+    <div class="items rv">
+      <div class="item"><p class="nm">保守ライト</p><p>相談対応、軽微な修正、障害発生時の<span style="white-space:nowrap">一次対応。</span></p><p class="pr">月額3万円〜</p></div>
+      <div class="item"><p class="nm">継続改善・開発保守</p><p>継続的な改修や改善提案、追加開発への<span style="white-space:nowrap">対応。</span></p><p class="pr">月額6万円〜</p></div>
     </div>
-    <h2 class="h2-quiet">作って終わりにしない。</h2>
-    <p class="sec-lede">保守契約は任意です。主に業務システムや、継続的な運用支援を必要とする方向けのプランです。</p>
-    <div class="items items--support">
-      <div class="item">
-        <p class="nm">保守ライト</p>
-        <p>相談対応、軽微な修正、障害発生時の一次対応。</p>
-        <p class="pr">月額3万円〜</p>
-      </div>
-      <div class="item">
-        <p class="nm">継続改善・開発保守</p>
-        <p>継続的な改修や改善提案、追加開発への対応。</p>
-        <p class="pr">月額6万円〜</p>
-      </div>
-    </div>
-    <p class="after-note">既存システムの保守のみのご相談にも対応しています。</p>
+    <p class="after-note rv">既存システムの保守のみのご相談にも対応しています。</p>
   </div>
 </section>
 
-<!-- ============ 10. Pricing ============ -->
+<!-- ============ Pricing ============ -->
 <section class="pricing" id="pricing">
   <div class="container">
-    <div class="sec-head">
-      <span class="sec-num">10</span>
-      <span class="sec-label">Pricing</span>
-    </div>
-    <h2 class="h2-mid">料金一覧</h2>
-    <table class="ptable">
-      <thead>
-        <tr><th>CATEGORY</th><th>SERVICE</th><th style="text-align:right">PRICE</th></tr>
-      </thead>
+    <div class="eyebrow"><span class="tape-chip">PRICING</span></div>
+    <h2 class="h2-mid rv">料金一覧</h2>
+    <table class="ptable rv">
+      <thead><tr><th>CATEGORY</th><th>SERVICE</th><th style="text-align:right">PRICE</th></tr></thead>
       <tbody>
-        <tr><td class="cat">Web制作</td><td class="svc">HP制作</td><td class="pr">5万円〜</td></tr>
-        <tr><td class="cat">Web制作</td><td class="svc">LP制作</td><td class="pr">10万円〜</td></tr>
-        <tr><td class="cat">新規システム開発</td><td class="svc">小規模Webシステム</td><td class="pr">30万円〜</td></tr>
-        <tr class="row-main"><td class="cat">新規システム開発</td><td class="svc">業務システム開発</td><td class="pr">100万円〜</td></tr>
-        <tr><td class="cat">新規システム開発</td><td class="svc">大規模・複合システム</td><td class="pr">個別見積もり</td></tr>
-        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td class="svc">STEP1 システム健康診断</td><td class="pr">5万円</td></tr>
-        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td class="svc">STEP2 仕様書復元・システム解析</td><td class="pr">20万円〜</td></tr>
-        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td class="svc">STEP3 スポット改修</td><td class="pr">5万円〜</td></tr>
-        <tr><td class="cat">継続支援</td><td class="svc">保守ライト</td><td class="pr">月額3万円〜</td></tr>
-        <tr><td class="cat">継続支援</td><td class="svc">継続改善・開発保守</td><td class="pr">月額6万円〜</td></tr>
+        <tr><td class="cat">Web制作</td><td>HP制作</td><td class="pr">5万円〜</td></tr>
+        <tr><td class="cat">Web制作</td><td>LP制作</td><td class="pr">10万円〜</td></tr>
+        <tr><td class="cat">新規システム開発</td><td>小規模Webシステム</td><td class="pr">30万円〜</td></tr>
+        <tr class="row-main"><td class="cat">新規システム開発</td><td>業務システム開発</td><td class="pr">100万円〜</td></tr>
+        <tr><td class="cat">新規システム開発</td><td>大規模・複合システム</td><td class="pr">個別見積もり</td></tr>
+        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td>STEP1 システム健康診断</td><td class="pr">5万円</td></tr>
+        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td>STEP2 仕様書復元・システム解析</td><td class="pr">20万円〜</td></tr>
+        <tr><td class="cat">既存PHP/Laravelシステム支援</td><td>STEP3 スポット改修</td><td class="pr">5万円〜</td></tr>
+        <tr><td class="cat">継続支援</td><td>保守ライト</td><td class="pr">月額3万円〜</td></tr>
+        <tr><td class="cat">継続支援</td><td>継続改善・開発保守</td><td class="pr">月額6万円〜</td></tr>
       </tbody>
     </table>
-
-    <!-- モバイル用:カテゴリ単位の縦リスト(700px以下で表示) -->
-    <div class="ptable-m" aria-hidden="false">
-      <div class="pm-group">
-        <p class="pm-cat">Web制作</p>
+    <div class="ptable-m">
+      <div class="pm-group"><p class="pm-cat">Web制作</p>
         <div class="pm-row"><span>HP制作</span><span class="pr">5万円〜</span></div>
-        <div class="pm-row"><span>LP制作</span><span class="pr">10万円〜</span></div>
-      </div>
-      <div class="pm-group">
-        <p class="pm-cat">新規システム開発</p>
+        <div class="pm-row"><span>LP制作</span><span class="pr">10万円〜</span></div></div>
+      <div class="pm-group"><p class="pm-cat">新規システム開発</p>
         <div class="pm-row"><span>小規模Webシステム</span><span class="pr">30万円〜</span></div>
-        <div class="pm-row pm-row--main"><span>業務システム開発</span><span class="pr">100万円〜</span></div>
-        <div class="pm-row"><span>大規模・複合システム</span><span class="pr">個別見積もり</span></div>
-      </div>
-      <div class="pm-group">
-        <p class="pm-cat">既存PHP/Laravelシステム支援</p>
+        <div class="pm-row"><span>業務システム開発</span><span class="pr">100万円〜</span></div>
+        <div class="pm-row"><span>大規模・複合システム</span><span class="pr">個別見積もり</span></div></div>
+      <div class="pm-group"><p class="pm-cat">既存PHP/Laravelシステム支援</p>
         <div class="pm-row"><span>STEP1 システム健康診断</span><span class="pr">5万円</span></div>
         <div class="pm-row"><span>STEP2 仕様書復元・システム解析</span><span class="pr">20万円〜</span></div>
-        <div class="pm-row"><span>STEP3 スポット改修</span><span class="pr">5万円〜</span></div>
-      </div>
-      <div class="pm-group">
-        <p class="pm-cat">継続支援</p>
+        <div class="pm-row"><span>STEP3 スポット改修</span><span class="pr">5万円〜</span></div></div>
+      <div class="pm-group"><p class="pm-cat">継続支援</p>
         <div class="pm-row"><span>保守ライト</span><span class="pr">月額3万円〜</span></div>
-        <div class="pm-row"><span>継続改善・開発保守</span><span class="pr">月額6万円〜</span></div>
-      </div>
+        <div class="pm-row"><span>継続改善・開発保守</span><span class="pr">月額6万円〜</span></div></div>
     </div>
-    <p class="after-note">上記に当てはまらない内容も、まずはご相談ください。</p>
+    <p class="after-note rv">上記に当てはまらない内容も、まずはご相談ください。</p>
   </div>
 </section>
 
-<!-- ============ 11. FAQ ============ -->
+<!-- ============ FAQ ============ -->
 <section class="faq" id="faq">
   <div class="container container--narrow">
-    <div class="sec-head">
-      <span class="sec-num">11</span>
-      <span class="sec-label">FAQ</span>
+    <div class="eyebrow"><span class="tape-chip">FAQ</span></div>
+    <h2 class="h2-mid rv" style="margin-bottom:20px;">よくあるご質問</h2>
+    <div>
+      <details class="qa rv"><summary><span class="qtext">相談だけでも大丈夫ですか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">はい。まずは状況をお伺いするところから始められます。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">見積もり前に何を準備すればいいですか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">現在の業務の流れや、困っている点を簡単にまとめていただけると、初回のご相談がスムーズです。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">100万円でどこまで作れますか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">顧客管理や予約管理、請求管理など、複数の機能を組み合わせた業務システムを想定した価格です。具体的な範囲は、要件によって前後します。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">既存システムの相談は、必ず健康診断から始める必要がありますか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">修正箇所がすでに明確な場合は、スポット改修から始めていただくことも可能です。状況がつかみにくい場合は、<span style="white-space:nowrap">健康診断</span>からのご相談をおすすめしています。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">HP制作の5万円には何が含まれますか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">1〜3ページ程度のサイト制作、基本的なお問い合わせフォーム、打ち合わせ3回までを含みます。ページ数や機能によっては、別途お見積もりとなる場合があります。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">HP公開後に月額の保守費用は<span style="white-space:nowrap">かかりますか。</span></span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">月額の保守契約は必須ではありません。文章や画像の変更、ページ追加などが必要になった際に、その都度ご相談いただけます。定期的な更新や運用支援が必要な場合は、内容に応じて継続支援をご提案します。なお、<span style="white-space:nowrap">サーバー・ドメイン</span>などの利用費用は別途必要です。</span></p></details>
+      <details class="qa rv"><summary><span class="qtext">誰が対応しますか。</span><span class="plus">+</span></summary>
+        <p class="a"><span class="atext">打ち合わせから要件整理、設計、実装、確認まで、基本的に大島本人が担当します。内容や規模に応じて協力者と連携する場合もありますが、窓口と全体の管理は一貫して担当します。困ったときにどこに聞けばいいか分からない、という<span style="white-space:nowrap">状態</span>にはしないようにしています。</span></p></details>
     </div>
-    <h2 class="h2-quiet">よくあるご質問</h2>
-    <dl>
-      <div class="qa">
-        <dt>相談だけでも大丈夫ですか。</dt>
-        <dd>はい。まずは状況をお伺いするところから始められます。</dd>
-      </div>
-      <div class="qa">
-        <dt>見積もり前に何を準備すればいいですか。</dt>
-        <dd>現在の業務の流れや、困っている点を簡単にまとめていただけると、初回のご相談がスムーズです。</dd>
-      </div>
-      <div class="qa">
-        <dt>100万円でどこまで作れますか。</dt>
-        <dd>顧客管理や予約管理、請求管理など、複数の機能を組み合わせた業務システムを想定した価格です。具体的な範囲は、要件によって前後します。</dd>
-      </div>
-      <div class="qa">
-        <dt>既存システムの相談は、必ず健康診断から始める必要がありますか。</dt>
-        <dd>修正箇所がすでに明確な場合は、スポット改修から始めていただくことも可能です。状況がつかみにくい場合は、健康診断からのご相談をおすすめしています。</dd>
-      </div>
-      <div class="qa">
-        <dt>HP制作の5万円には何が含まれますか。</dt>
-        <dd>1〜3ページ程度のサイト制作、基本的なお問い合わせフォーム、打ち合わせ3回までを含みます。ページ数や機能によっては、別途お見積もりとなる場合があります。</dd>
-      </div>
-      <div class="qa">
-        <dt>HP公開後に月額の保守費用はかかりますか。</dt>
-        <dd>月額の保守契約は必須ではありません。文章や画像の変更、ページ追加などが必要になった際に、その都度ご相談いただけます。定期的な更新や運用支援が必要な場合は、内容に応じて継続支援をご提案します。なお、サーバー・ドメインなどの利用費用は別途必要です。</dd>
-      </div>
-      <div class="qa">
-        <dt>誰が対応しますか。</dt>
-        <dd>打ち合わせから要件整理、設計、実装、確認まで、基本的に大島本人が担当します。内容や規模に応じて協力者と連携する場合もありますが、窓口と全体の管理は一貫して担当します。</dd>
-      </div>
-    </dl>
   </div>
 </section>
 
-<!-- ============ 12. CTA ============ -->
+<!-- ============ CTA ============ -->
 <section class="cta" id="cta">
-  <div class="container inner">
-    <!-- Hero演出の縮小再演:3本の線が1本につながる -->
-    <div class="cta-fig" id="ctaFig" aria-hidden="true">
-      <svg viewBox="0 0 560 90">
-        <g class="seg" style="--tx:-24px; --ty:14px;  --r:-10deg; --d:.1s"><line x1="20"  y1="45" x2="180" y2="45"/></g>
-        <g class="seg" style="--tx:14px;  --ty:-18px; --r:7deg;   --d:.3s"><line x1="200" y1="45" x2="360" y2="45"/></g>
-        <g class="seg" style="--tx:-16px; --ty:20px;  --r:-6deg;  --d:.5s"><line x1="380" y1="45" x2="540" y2="45"/></g>
-        <circle class="joint" cx="190" cy="45" r="3" style="--d:.9s"/>
-        <circle class="joint" cx="370" cy="45" r="3" style="--d:1s"/>
-        <text class="dimtxt" x="280" y="24" text-anchor="middle">READY TO CONNECT</text>
-      </svg>
+  <div class="container">
+    <div class="cta-stage">
+      <div class="prop sticky b paper-shadow">まずはここから</div>
+      <h2>まずは、ご相談ください。</h2>
+      <p class="cta-lede">整理しきれていない状態でも、うまく言葉にできなくても構いません。</p>
+      <div class="btns">
+        <a class="btn" href="mailto:shima.62512@gmail.com?subject=業務システムについての相談">業務システムについて相談する<span class="arw">→</span></a>
+        <a class="btn btn--outline" style="border-color:var(--ink)" href="mailto:shima.62512@gmail.com?subject=既存システムについての相談">既存システムについて相談する<span class="arw">→</span></a>
+        <a class="btn btn--outline" style="border-color:var(--ink)" href="mailto:shima.62512@gmail.com?subject=Web制作についての相談">Web制作について相談する<span class="arw">→</span></a>
+      </div>
+      <p class="note">※業務システムについてのご相談では、現在の業務の流れを簡単にご記入いただくと、より具体的にお話しできます。</p>
     </div>
-
-    <h2>まずは、ご相談ください。</h2>
-    <div class="btns">
-      <!-- ============================================================
-           問い合わせ導線(差し替えポイント)
-           現在:mailto直リンク(件名で3種を区別)
-           将来:問い合わせフォーム導入時は、各リンクの href を
-                 フォームURL + ?type={data-inquiry の値} に差し替える想定
-                 (system / rescue / web の3種類)
-      ============================================================ -->
-      <a class="btn btn--fill"   data-inquiry="system" href="mailto:shima.62512@gmail.com?subject=業務システムについての相談">業務システムについて相談する<span class="arw">→</span></a>
-      <a class="btn btn--struct" data-inquiry="rescue" href="mailto:shima.62512@gmail.com?subject=既存システムについての相談">既存システムについて相談する<span class="arw">→</span></a>
-      <a class="btn btn--struct" data-inquiry="web"    href="mailto:shima.62512@gmail.com?subject=Web制作についての相談">Web制作について相談する<span class="arw">→</span></a>
-    </div>
-    <p class="note">※業務システムについてのご相談では、現在の業務の流れを簡単にご記入いただくと、より具体的にお話しできます。</p>
   </div>
 </section>
 
 </main>
 
 <footer class="site-footer">
-  <div class="inner">
+  <div class="container">
     <div class="frow">
       <span>業務を整理し、仕組みに変える。</span>
       <span>PHP / LARAVEL — SYSTEM · RESCUE · WEB</span>
@@ -1299,92 +693,50 @@ h2{
 
 <script>
 (function(){
-  const mqDesktop = window.matchMedia('(min-width: 961px)');
-  const mqReduce  = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const isDesktop = () => mqDesktop.matches;
-  const noMotion  = () => mqReduce.matches;
-
-  /* ---------- 01. Hero:読み込み後に自動再生 ---------- */
-  const heroFig = document.getElementById('heroFig');
-  window.addEventListener('load', () => {
-    if (isDesktop() && !noMotion()) {
-      setTimeout(() => heroFig.classList.add('assembled'), 350);
-    } else {
-      heroFig.classList.add('assembled');
-      requestAnimationFrame(() => heroFig.classList.add('mb-on'));
-    }
-  });
-
-  /* Hero:ごく弱い視差(グリッドと主線のみ・デスクトップのみ) */
-  const heroGrid = document.getElementById('heroGrid');
-  const hero = document.getElementById('hero');
-  if (hero) {
-    hero.addEventListener('mousemove', (e) => {
-      if (!isDesktop() || noMotion()) return;
-      const r = hero.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width  - .5;
-      const y = (e.clientY - r.top)  / r.height - .5;
-      heroGrid.style.transform = `translate(${x * -8}px, ${y * -8}px)`;
-      heroFig.style.transform  = `translate(${x * 4}px, ${y * 4}px)`;
-    });
-    hero.addEventListener('mouseleave', () => {
-      heroGrid.style.transform = '';
-      heroFig.style.transform = '';
-    });
-    window.addEventListener('scroll', () => {
-      if (!isDesktop() || noMotion()) return;
-      const sc = Math.min(window.scrollY, 600);
-      heroGrid.style.transform = `translateY(${sc * -0.03}px)`;
-    }, { passive:true });
-  }
-
-  /* ---------- 共通:軽いフェード(.rv) ---------- */
+  /* ---------- 共通フェード ---------- */
   const rvObs = new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      if (en.isIntersecting) { en.target.classList.add('on'); rvObs.unobserve(en.target); }
-    });
-  }, { threshold:.2 });
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('on'); rvObs.unobserve(en.target); } });
+  }, { threshold:.15 });
   document.querySelectorAll('.rv').forEach(el => rvObs.observe(el));
 
-  /* ---------- 04. Case Study:スクロール連動の図形再配置 ---------- */
-  const caseFig = document.getElementById('caseFig');
-  const cfLabel = document.getElementById('cfLabel');
-  const stages  = document.querySelectorAll('.stage');
-  if (caseFig && stages.length) {
-    const stObs = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          const s = en.target.dataset.stage;
-          caseFig.dataset.stage = s;
-          cfLabel.textContent = s.toUpperCase().replace('FLOW','SYSTEM FLOW');
-          cfLabel.style.color = (s === 'after') ? 'var(--accent)' : 'var(--struct)';
-          stages.forEach(x => x.classList.toggle('is-active', x === en.target));
-        }
-      });
-    }, { rootMargin:'-42% 0px -42% 0px' });
-    stages.forEach(s => stObs.observe(s));
-  }
+  /* ---------- Hero:小物が「投げ込まれて着地する」演出 ---------- */
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const props = document.querySelectorAll('.hero .prop');
+  if (!reduce) {
+    props.forEach((el, i) => {
+      const [dx, dy, rot] = (el.dataset.land || "0,0,0").split(',').map(Number);
+      // 初期位置:画面外から・回転を大きくつけてランダムに散らす
+      const startX = 260 + Math.random()*120;
+      const startY = -140 - Math.random()*60;
+      const startRot = rot + (Math.random() > .5 ? 40 : -40);
+      el.style.transform = `translate(${startX}px, ${startY}px) rotate(${startRot}deg)`;
+      setTimeout(() => {
+        el.classList.add('land');
+        el.style.transform = `translate(0px, 0px) rotate(${rot}deg)`;
+      }, 300 + i * 130);
+    });
 
-  /* ---------- 05. How I Build:順次ハイライト ---------- */
-  const steps = document.getElementById('buildSteps');
-  if (steps) {
-    const so = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) { steps.classList.add('on'); so.unobserve(steps); }
+    /* 着地後はカーソルに軽く反応する(紙を覗き込む感覚) */
+    const stage = document.getElementById('heroVisual');
+    if (stage) {
+      stage.addEventListener('mousemove', (e) => {
+        const r = stage.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        props.forEach((el) => {
+          const [, , rot] = (el.dataset.land || "0,0,0").split(',').map(Number);
+          el.style.transform = `translate(${x*10}px, ${y*10}px) rotate(${rot + x*4}deg)`;
+        });
       });
-    }, { threshold:.4 });
-    so.observe(steps);
-  }
-
-  /* ---------- 11. CTA:Hero演出の縮小再演 ---------- */
-  const ctaFig = document.getElementById('ctaFig');
-  if (ctaFig) {
-    const co = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) { ctaFig.classList.add('assembled'); co.unobserve(ctaFig); }
+      stage.addEventListener('mouseleave', () => {
+        props.forEach((el) => {
+          const [, , rot] = (el.dataset.land || "0,0,0").split(',').map(Number);
+          el.style.transform = `translate(0px,0px) rotate(${rot}deg)`;
+        });
       });
-    }, { threshold:.5 });
-    co.observe(ctaFig);
+    }
+  } else {
+    props.forEach(el => { el.style.opacity = 1; });
   }
 })();
 </script>
