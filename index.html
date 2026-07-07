@@ -324,6 +324,7 @@ h2{
 .case{ background:var(--bg2); padding:92px 0 96px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
 .case .sec-head{ margin-bottom:8px; }
 .case h2{ margin-bottom:48px; }
+.case .case-lede{ margin:-30px 0 52px; max-width:42em; font-size:15px; letter-spacing:.04em; }
 .case .layout{
   display:grid; grid-template-columns:minmax(0,44%) minmax(0,56%);
   gap:56px; align-items:start;
@@ -505,6 +506,20 @@ h2{
 .steps.on .step:nth-child(6) .dot,.steps.on .step:nth-child(6) .no,.steps.on .step:nth-child(6) .nm,.steps.on .step:nth-child(6) .nm small{ transition-delay:.8s; }
 .howto .body{ margin-top:26px; max-width:42em; font-size:15px; letter-spacing:.04em; }
 
+/* ---------- 06. profile ---------- */
+.profile{ padding:0 0 104px; }
+.profile .sec-head{ margin-bottom:6px; }
+.profile h2{ margin-bottom:28px; }
+.profile .p-body{ border-top:1px solid var(--rule); padding-top:26px; max-width:42em; }
+.profile .p-body p{ font-size:15px; letter-spacing:.04em; }
+.profile .p-body p + p{ margin-top:14px; }
+.profile .p-meta{
+  margin-top:32px; padding-top:14px; border-top:1px solid var(--rule);
+  max-width:42em;
+  display:flex; justify-content:space-between; gap:10px 24px; flex-wrap:wrap;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--struct);
+}
+
 /* ================================================================
    06. Rescue
 ================================================================ */
@@ -555,6 +570,7 @@ h2{
 .quiet + .quiet{ padding-top:0; }
 .quiet .sec-head{ margin-bottom:6px; }
 .quiet h2{ margin-bottom:36px; }
+.quiet .sec-lede{ margin:-24px 0 32px; max-width:42em; font-size:13.5px; letter-spacing:.04em; }
 .quiet .items{ border-top:1px solid var(--rule); }
 .quiet .item{
   display:grid; grid-template-columns:220px 1fr 140px;
@@ -945,6 +961,7 @@ h2{
       <span class="sec-label">Case Study</span>
     </div>
     <h2 class="h2-major">ある運送会社の場合</h2>
+    <p class="case-lede rv">現場では紙の伝票、事務所ではExcel。月末になると、電話や口頭で内容を確認しながら請求書を作成していました。そこで、現場入力から確認、締め処理、請求候補の作成までを、一つの流れとして整理しました。</p>
 
     <div class="layout">
       <div class="stages">
@@ -1034,11 +1051,31 @@ h2{
   </div>
 </section>
 
-<!-- ============ 06. Rescue ============ -->
+<!-- ============ 06. Profile ============ -->
+<section class="profile" id="profile">
+  <div class="container container--narrow">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <span class="sec-label">Profile</span>
+    </div>
+    <h2 class="h2-quiet rv">はじめまして、大島です。</h2>
+    <div class="p-body rv">
+      <p>Web制作から業務システム開発、既存システムの調査・改修まで対応しています。</p>
+      <p>まだ要件が整理されていない状態でも、現在の業務や困っていることを伺いながら、一つずつ整理していきます。</p>
+      <p>打ち合わせから設計、実装、確認まで、私自身が責任を持って対応します。</p>
+    </div>
+    <div class="p-meta rv">
+      <span>KAZUKI OSHIMA</span>
+      <span>WEB / SYSTEM DEVELOPMENT — PHP / LARAVEL</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07. Rescue ============ -->
 <section class="rescue" id="rescue">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num">06</span>
+      <span class="sec-num">07</span>
       <span class="sec-label">Rescue — 既存システム支援</span>
     </div>
     <h2 class="h2-mid">誰も触れないシステムからでも、<br>始められます。</h2>
@@ -1065,11 +1102,11 @@ h2{
   </div>
 </section>
 
-<!-- ============ 07. Web ============ -->
+<!-- ============ 08. Web ============ -->
 <section class="quiet" id="web">
   <div class="container container--narrow">
     <div class="sec-head">
-      <span class="sec-num">07</span>
+      <span class="sec-num">08</span>
       <span class="sec-label">Web</span>
     </div>
     <h2 class="h2-quiet">小さく始めたい方へ。</h2>
@@ -1085,20 +1122,22 @@ h2{
         <p class="pr">10万円〜</p>
       </div>
     </div>
+    <p class="after-note">HP・LP制作では、月額の保守契約は必須ではありません。公開後の修正や追加は、必要なタイミングで個別に対応します。サーバー・ドメインなどの利用費用は別途必要です。</p>
     <div class="cta-row">
       <a class="btn" href="#cta">Web制作について相談する<span class="arw">→</span></a>
     </div>
   </div>
 </section>
 
-<!-- ============ 08. Support ============ -->
+<!-- ============ 09. Support ============ -->
 <section class="quiet" id="support">
   <div class="container container--narrow">
     <div class="sec-head">
-      <span class="sec-num">08</span>
-      <span class="sec-label">Support</span>
+      <span class="sec-num">09</span>
+      <span class="sec-label">Support — システム保守・継続支援</span>
     </div>
     <h2 class="h2-quiet">作って終わりにしない。</h2>
+    <p class="sec-lede">保守契約は任意です。主に業務システムや、継続的な運用支援を必要とする方向けのプランです。</p>
     <div class="items items--support">
       <div class="item">
         <p class="nm">保守ライト</p>
@@ -1115,11 +1154,11 @@ h2{
   </div>
 </section>
 
-<!-- ============ 09. Pricing ============ -->
+<!-- ============ 10. Pricing ============ -->
 <section class="pricing" id="pricing">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num">09</span>
+      <span class="sec-num">10</span>
       <span class="sec-label">Pricing</span>
     </div>
     <h2 class="h2-mid">料金一覧</h2>
@@ -1170,11 +1209,11 @@ h2{
   </div>
 </section>
 
-<!-- ============ 10. FAQ ============ -->
+<!-- ============ 11. FAQ ============ -->
 <section class="faq" id="faq">
   <div class="container container--narrow">
     <div class="sec-head">
-      <span class="sec-num">10</span>
+      <span class="sec-num">11</span>
       <span class="sec-label">FAQ</span>
     </div>
     <h2 class="h2-quiet">よくあるご質問</h2>
@@ -1199,11 +1238,19 @@ h2{
         <dt>HP制作の5万円には何が含まれますか。</dt>
         <dd>1〜3ページ程度のサイト制作、基本的なお問い合わせフォーム、打ち合わせ3回までを含みます。ページ数や機能によっては、別途お見積もりとなる場合があります。</dd>
       </div>
+      <div class="qa">
+        <dt>HP公開後に月額の保守費用はかかりますか。</dt>
+        <dd>月額の保守契約は必須ではありません。文章や画像の変更、ページ追加などが必要になった際に、その都度ご相談いただけます。定期的な更新や運用支援が必要な場合は、内容に応じて継続支援をご提案します。なお、サーバー・ドメインなどの利用費用は別途必要です。</dd>
+      </div>
+      <div class="qa">
+        <dt>誰が対応しますか。</dt>
+        <dd>打ち合わせから要件整理、設計、実装、確認まで、基本的に大島本人が担当します。内容や規模に応じて協力者と連携する場合もありますが、窓口と全体の管理は一貫して担当します。</dd>
+      </div>
     </dl>
   </div>
 </section>
 
-<!-- ============ 11. CTA ============ -->
+<!-- ============ 12. CTA ============ -->
 <section class="cta" id="cta">
   <div class="container inner">
     <!-- Hero演出の縮小再演:3本の線が1本につながる -->
